@@ -24,10 +24,7 @@ import com.example.david.dontouch.Fragment.JournalFragment;
 import com.example.david.dontouch.Fragment.NotifFragment;
 import com.example.david.dontouch.R;
 
-import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 

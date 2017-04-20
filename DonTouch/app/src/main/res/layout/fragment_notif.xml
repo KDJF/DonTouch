@@ -3,12 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.david.dontouch.Fragment.NotifFragment">
-
-    <ImageView
-        android:id="@+id/notif"
+    <LinearLayout
+        android:id="@+id/notif_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@mipmap/notif"/>
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/notif_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+    </LinearLayout>
 
 </FrameLayout>

@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.david.dontouch.R;
+import com.example.david.dontouch.View.NotifProgressView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +24,7 @@ import ch.ielse.view.SwitchView;
  */
 public class NotifFragment  extends Fragment {
     private ListView listView;
+    private NotifProgressView notifProgressView;
     private List<Map<String, Object>> mData;
 
     public NotifFragment() {
@@ -37,9 +38,12 @@ public class NotifFragment  extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notif, container, false);
         listView = (ListView) view.findViewById(R.id.notif_list);
+        notifProgressView = (NotifProgressView) view.findViewById(R.id.notif_progress);
+        notifProgressView.setProgress(98);
         mData = getData();
         MyAdapter adapter = new MyAdapter(getContext());
         listView.setAdapter(adapter);
+        listView.setEnabled(false);
         return view;
     }
 

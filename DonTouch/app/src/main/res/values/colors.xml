@@ -15,4 +15,6 @@
     <color name="circle_color">#323a45</color>
     <color name="ring_color">#14b9d6</color>
 
+    <color name="black_overlay">#66000000</color>
+
 </resources>

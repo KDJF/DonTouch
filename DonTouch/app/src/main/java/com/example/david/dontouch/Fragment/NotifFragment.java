@@ -1,14 +1,20 @@
 package com.example.david.dontouch.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.david.dontouch.Activity.CountDownActivity;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.View.NotifProgressView;
 
@@ -26,6 +32,7 @@ public class NotifFragment  extends Fragment {
     private ListView listView;
     private NotifProgressView notifProgressView;
     private List<Map<String, Object>> mData;
+    private Button button;
 
     public NotifFragment() {
         // Required empty public constructor
@@ -39,11 +46,20 @@ public class NotifFragment  extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notif, container, false);
         listView = (ListView) view.findViewById(R.id.notif_list);
         notifProgressView = (NotifProgressView) view.findViewById(R.id.notif_progress);
-        notifProgressView.setProgress(98);
+        notifProgressView.setProgress(66);
         mData = getData();
         MyAdapter adapter = new MyAdapter(getContext());
         listView.setAdapter(adapter);
         listView.setEnabled(false);
+        button = (Button) view.findViewById(R.id.notif_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), CountDownActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
@@ -74,7 +90,6 @@ public class NotifFragment  extends Fragment {
 
         private LayoutInflater mInflater;
 
-
         public MyAdapter(Context context){
             this.mInflater = LayoutInflater.from(context);
         }
@@ -87,7 +102,7 @@ public class NotifFragment  extends Fragment {
         @Override
         public Object getItem(int arg0) {
             // TODO Auto-generated method stub
-            return null;
+            return mData.get(arg0);
         }
 
         @Override
@@ -97,12 +112,12 @@ public class NotifFragment  extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
-            ViewHolder holder = null;
+            ViewHolder holder;
             if (convertView == null) {
 
-                holder=new ViewHolder();
+                holder = new ViewHolder();
 
                 convertView = mInflater.inflate(R.layout.notif_item, null);
                 holder.title = (TextView)convertView.findViewById(R.id.notif_item_text);
@@ -121,10 +136,13 @@ public class NotifFragment  extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    //boolean isOpened = viewBtn.isOpened();
+                    if (position == 0) {
+                        notifProgressView.setTotalMin(40);
+                    } else if (position == 1) {
+                        Log.i("b", "bbbbbbbbbb");
+                    }
                 }
             });
-
 
             return convertView;
         }

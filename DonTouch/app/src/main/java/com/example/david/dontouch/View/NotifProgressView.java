@@ -44,6 +44,10 @@ public class NotifProgressView extends View {
     private int mTotalProgress = 100;
     // 当前进度
     private int mProgress;
+    // 显示总时间
+    private int totalMin;
+    // 显示已用时间
+    private int currentMin;
 
     public NotifProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -78,7 +82,7 @@ public class NotifProgressView extends View {
         mTextPaint.setAntiAlias(true);
         mTextPaint.setStyle(Paint.Style.FILL);
         mTextPaint.setARGB(255, 255, 255, 255);
-        mTextPaint.setTextSize(mRadius / 2);
+        mTextPaint.setTextSize(mRadius / 4);
 
         Paint.FontMetrics fm = mTextPaint.getFontMetrics();
         mTxtHeight = (int) Math.ceil(fm.descent - fm.ascent);
@@ -99,17 +103,27 @@ public class NotifProgressView extends View {
             oval.top = (mYCenter - mRingRadius);
             oval.right = mRingRadius * 2 + (mXCenter - mRingRadius);
             oval.bottom = mRingRadius * 2 + (mYCenter - mRingRadius);
-            canvas.drawArc(oval, -90, ((float)mProgress / mTotalProgress) * 360, false, mRingPaint); //
-//                        canvas.drawCircle(mXCenter, mYCenter, mRadius + mStrokeWidth / 2, mRingPaint);
-            String txt = mProgress + "%";
+            canvas.drawArc(oval, -90, ((float)mProgress / mTotalProgress) * 360, false, mRingPaint);
+            setTotalMin(30);
+            setCurrentMin(20);
+            String txt = currentMin + " / " + totalMin;
             mTxtWidth = mTextPaint.measureText(txt, 0, txt.length());
             canvas.drawText(txt, mXCenter - mTxtWidth / 2, mYCenter + mTxtHeight / 4, mTextPaint);
         }
     }
 
+    public void setTotalMin(int text) {
+        totalMin = text;
+        postInvalidate();
+    }
+
+    public void setCurrentMin(int text) {
+        currentMin = text;
+        postInvalidate();
+    }
+
     public void setProgress(int progress) {
         mProgress = progress;
-//                invalidate();
         postInvalidate();
     }
 }

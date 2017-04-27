@@ -39,7 +39,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_count_down"
             android:theme="@style/FullscreenTheme" />
-
+        <activity android:name=".Activity.CountTimeDownActivity"></activity>
     </application>
 
 </manifest>

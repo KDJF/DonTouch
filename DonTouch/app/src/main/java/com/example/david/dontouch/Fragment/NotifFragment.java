@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.david.dontouch.Activity.CountDownActivity;
+import com.example.david.dontouch.Activity.CountTimeDownActivity;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.View.NotifProgressView;
 
@@ -56,7 +57,7 @@ public class NotifFragment  extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), CountDownActivity.class);
+                intent.setClass(getActivity(), CountTimeDownActivity.class);
                 startActivity(intent);
             }
         });

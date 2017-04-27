@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.david.dontouch.R;
 
+import static java.lang.Thread.sleep;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -37,6 +39,7 @@ public class CountDownActivity extends AppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
     private TextView mContentView;
+    private int down_time;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -99,32 +102,13 @@ public class CountDownActivity extends AppCompatActivity {
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = (TextView) findViewById(R.id.fullscreen_content);
 
-
-        // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (timer == null) {
-                    timer = new CountDownTimer(10000, 1000) {
-
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            mContentView.setText((millisUntilFinished / 1000) + "秒后可重发");
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            mContentView.setEnabled(true);
-                            mContentView.setText("获取验证码");
-                        }
-                    };
-                    timer.start();
-                } else {
-                    toggle();
-                    finish();
-                }
-            }
-        });
+        if (timer == null) {
+            setTime();
+            setTimer(down_time);
+        } else {
+            toggle();
+            finish();
+        }
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
@@ -183,5 +167,33 @@ public class CountDownActivity extends AppCompatActivity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    private void setTimer(int time) {
+        timer = new CountDownTimer(time, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mContentView.setText("倒计时：" + (millisUntilFinished / 1000) + "秒");
+            }
+
+            @Override
+            public void onFinish() {
+                mContentView.setEnabled(true);
+                mContentView.setText("时间到啦！");
+                try {
+                    sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                finish();
+            }
+        };
+        timer.start();
+    }
+
+    public void setTime() {
+        Intent intent = getIntent();
+        down_time = intent.getIntExtra("time", down_time);
     }
 }

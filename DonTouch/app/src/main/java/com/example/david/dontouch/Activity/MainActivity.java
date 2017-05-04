@@ -1,21 +1,17 @@
 package com.example.david.dontouch.Activity;
 
-import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.example.david.dontouch.Adapter.ViewPagerAdapter;
 import com.example.david.dontouch.Fragment.AssessFragment;
@@ -23,8 +19,7 @@ import com.example.david.dontouch.Fragment.HomeFragment;
 import com.example.david.dontouch.Fragment.JournalFragment;
 import com.example.david.dontouch.Fragment.NotifFragment;
 import com.example.david.dontouch.R;
-
-
+import com.example.david.dontouch.Util.BottomNavigationViewHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -105,8 +100,15 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         viewPager.addOnPageChangeListener(mOnViewPageChangeListener);
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         setupViewPager(viewPager);
     }
 

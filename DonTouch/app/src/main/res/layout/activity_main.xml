@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    tools:context="com.example.david.dontouch.Activity.MainActivity"
     tools:openDrawer="start">
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -17,37 +19,49 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
-<LinearLayout
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true">
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-
-    <!--tools:context="com.example.david.dontouch.Activity.MainActivity">-->
-    <include layout="@layout/title_bar"></include>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+    <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--<include layout="@layout/title_bar"></include>-->
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/ring_color"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        app:itemIconTint="@drawable/bottom_navigation_color_selector"
-        app:itemTextColor="@drawable/bottom_navigation_color_selector"
-        app:menu="@menu/navigation"/>
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            app:itemIconTint="@drawable/bottom_navigation_color_selector"
+            app:itemTextColor="@drawable/bottom_navigation_color_selector"
+            app:menu="@menu/navigation" />
 
-</LinearLayout>
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

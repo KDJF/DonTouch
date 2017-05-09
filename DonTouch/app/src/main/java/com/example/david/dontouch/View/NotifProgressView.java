@@ -45,9 +45,9 @@ public class NotifProgressView extends View {
     // 当前进度
     private int mProgress;
     // 显示总时间
-    private int totalMin;
+    private double totalMin = 30;
     // 显示已用时间
-    private int currentMin;
+    private double currentMin = 20;
 
     public NotifProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -104,26 +104,37 @@ public class NotifProgressView extends View {
             oval.right = mRingRadius * 2 + (mXCenter - mRingRadius);
             oval.bottom = mRingRadius * 2 + (mYCenter - mRingRadius);
             canvas.drawArc(oval, -90, ((float)mProgress / mTotalProgress) * 360, false, mRingPaint);
-            setTotalMin(30);
-            setCurrentMin(20);
             String txt = currentMin + " / " + totalMin;
             mTxtWidth = mTextPaint.measureText(txt, 0, txt.length());
             canvas.drawText(txt, mXCenter - mTxtWidth / 2, mYCenter + mTxtHeight / 4, mTextPaint);
         }
     }
 
-    public void setTotalMin(int text) {
+    public void setTotalMin(double text) {
         totalMin = text;
-        postInvalidate();
+        updateProgress(currentMin, totalMin);
     }
 
-    public void setCurrentMin(int text) {
+    public double getTotalMin() {
+        return totalMin;
+    }
+
+    public double getCurrentMin() {
+        return currentMin;
+    }
+
+    public void setCurrentMin(double text) {
         currentMin = text;
         postInvalidate();
     }
 
     public void setProgress(int progress) {
         mProgress = progress;
+        postInvalidate();
+    }
+
+    private void updateProgress(double cur, double tot) {
+        mProgress = (int)(cur / tot * 100);
         postInvalidate();
     }
 }

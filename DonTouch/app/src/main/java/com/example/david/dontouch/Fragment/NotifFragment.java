@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.david.dontouch.Activity.CountDownActivity;
 import com.example.david.dontouch.Activity.CountTimeDownActivity;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.View.NotifProgressView;
+import com.example.david.dontouch.View.SelfDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +36,7 @@ public class NotifFragment  extends Fragment {
     private NotifProgressView notifProgressView;
     private List<Map<String, Object>> mData;
     private Button button;
-
+    private int totalNumber;
     public NotifFragment() {
         // Required empty public constructor
     }
@@ -115,7 +117,7 @@ public class NotifFragment  extends Fragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            ViewHolder holder;
+            final ViewHolder holder;
             if (convertView == null) {
 
                 holder = new ViewHolder();
@@ -138,9 +140,20 @@ public class NotifFragment  extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (position == 0) {
-                        notifProgressView.setTotalMin(40);
+                        SelfDialog selfDialog = new SelfDialog(getContext(), new SelfDialog.ICustomDialogEventListener() {
+                            @Override
+                            public void customDialogEvent(int id) {
+                                if (id != 0) {
+                                    totalNumber = id;
+                                    Toast.makeText(getContext(), "Number: " + totalNumber, Toast.LENGTH_SHORT).show();
+                                    notifProgressView.setTotalMin(totalNumber);
+                                }
+                            }
+                        });
+                        selfDialog.show();
+
                     } else if (position == 1) {
-                        Log.i("b", "bbbbbbbbbb");
+                        Log.i("tag", "position:"+position);
                     }
                 }
             });

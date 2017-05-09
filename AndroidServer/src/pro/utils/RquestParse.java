@@ -4,17 +4,18 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import pro.service.UserService;
+import pro.serviceImpl.UserServiceImpl;
+import pro.serviceinterface.UserService;
 
 public class RquestParse {
 	private DataInputStream input = null;
 	private DataOutputStream out = null;
 	private UserService userService = null;
 
-	public RquestParse(DataInputStream input, DataOutputStream out) {
+	public RquestParse(DataInputStream input, DataOutputStream out,UserService useServiceImpl) {
 		this.input = input;
 		this.out = out;
-		userService = new UserService();
+		userService = useServiceImpl;
 	}
 
 	public void parseMethod(String requestString) {

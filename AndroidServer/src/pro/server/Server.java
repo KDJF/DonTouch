@@ -6,6 +6,8 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import pro.serviceImpl.UserServiceImpl;
 import pro.utils.RquestParse;
 
 public class Server {
@@ -46,7 +48,7 @@ public class Server {
                 String clientInputStr = input.readUTF();//这里要注意和客户端输出流的写方法对应,否则会抛 EOFException
                 // 处理客户端数据  
                 System.out.println("客户端发过来的内容:" + clientInputStr);
-                RquestParse rp = new RquestParse(input,out);
+                RquestParse rp = new RquestParse(input,out,new UserServiceImpl());
                 rp.parseMethod(clientInputStr);
                 
                 out.writeUTF("no anwser");

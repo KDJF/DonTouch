@@ -14,7 +14,8 @@
     <color name="tab_unchecked">#99336699</color>
     <color name="circle_color">#323a45</color>
     <color name="ring_color">#14b9d6</color>
-
+    <color name="white">#FFFFFF</color><!--白色 -->
+    <color name="cornflowerblue">#6495ED</color><!--菊兰色 -->
     <color name="black_overlay">#66000000</color>
 
 </resources>

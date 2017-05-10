@@ -2,9 +2,9 @@ package com.example.david.dontouch.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +14,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.david.dontouch.Activity.CountDownActivity;
 import com.example.david.dontouch.Activity.CountTimeDownActivity;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.View.NotifProgressView;
 import com.example.david.dontouch.View.SelfDialog;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +34,8 @@ public class NotifFragment  extends Fragment {
     private List<Map<String, Object>> mData;
     private Button button;
     private int totalNumber;
+    private SharedPreferences setting;
+
     public NotifFragment() {
         // Required empty public constructor
     }
@@ -51,6 +50,8 @@ public class NotifFragment  extends Fragment {
         notifProgressView = (NotifProgressView) view.findViewById(R.id.notif_progress);
         notifProgressView.setProgress(66);
         mData = getData();
+        setting = getActivity().getSharedPreferences("test", Context.MODE_PRIVATE);
+
         MyAdapter adapter = new MyAdapter(getContext());
         listView.setAdapter(adapter);
         listView.setEnabled(false);
@@ -145,7 +146,7 @@ public class NotifFragment  extends Fragment {
                             public void customDialogEvent(int id) {
                                 if (id != 0) {
                                     totalNumber = id;
-                                    Toast.makeText(getContext(), "Number: " + totalNumber, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "Number: " + totalNumber, Toast.LENGTH_SHORT).show();
                                     notifProgressView.setTotalMin(totalNumber);
                                 }
                             }

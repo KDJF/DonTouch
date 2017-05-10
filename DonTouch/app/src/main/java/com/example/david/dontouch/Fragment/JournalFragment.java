@@ -1,7 +1,8 @@
 package com.example.david.dontouch.Fragment;
 
 
-import android.content.pm.PackageManager;
+import android.content.Intent;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,10 +14,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.david.dontouch.Activity.MainActivity;
 import com.example.david.dontouch.Model.AppItemInfo;
 import com.example.david.dontouch.R;
-import com.example.david.dontouch.Util.AppTime;
+import com.example.david.dontouch.Util.UStats;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,6 @@ public class JournalFragment extends Fragment {
 
     private ArrayList<AppItemInfo> list;
     private ListView listview;
-    //private PackageManager pManager;
     private Button refresh ;
     private baseAdapter mAdapter ;
 
@@ -40,10 +39,13 @@ public class JournalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_journal, container, false);
+        final View view = inflater.inflate(R.layout.fragment_journal, container, false);
         listview = (ListView) view.findViewById(R.id.listview);
-        //pManager = view.getContext().getPackageManager();
-        list = new AppTime(getContext()).getRunPkgUsageStats();
+        if (UStats.getUsageStatsList(view.getContext()).isEmpty()){
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startActivity(intent);
+        }
+        list = UStats.getUsageStatsList(view.getContext());
         mAdapter = new baseAdapter(list) ;
         listview.setAdapter(mAdapter);
         refresh = (Button) view.findViewById(R.id.refresh);
@@ -51,7 +53,7 @@ public class JournalFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                list = new AppTime(getContext()).getRunPkgUsageStats();
+                list = UStats.getUsageStatsList(view.getContext());
                 mAdapter.notifyDataSetChanged();
             }
         });

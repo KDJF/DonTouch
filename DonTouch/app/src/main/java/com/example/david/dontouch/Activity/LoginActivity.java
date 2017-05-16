@@ -2,8 +2,8 @@ package com.example.david.dontouch.Activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -14,11 +14,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.david.dontouch.Dao.SQLiteDB;
 import com.example.david.dontouch.Model.User;
 import com.example.david.dontouch.R;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity  implements View.OnClickListener {
 

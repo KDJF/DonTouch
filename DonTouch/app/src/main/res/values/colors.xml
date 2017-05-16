@@ -17,5 +17,6 @@
     <color name="white">#FFFFFF</color><!--白色 -->
     <color name="cornflowerblue">#6495ED</color><!--菊兰色 -->
     <color name="black_overlay">#66000000</color>
+    <color name="dark_color">#037589</color>
 
 </resources>

@@ -1,25 +1,14 @@
 package com.example.david.dontouch.Fragment;
 
 
-import android.content.Intent;
-import android.provider.Settings;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.example.david.dontouch.Model.AppItemInfo;
 import com.example.david.dontouch.R;
-import com.example.david.dontouch.Util.UStats;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.

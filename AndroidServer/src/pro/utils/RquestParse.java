@@ -1,29 +1,29 @@
 package pro.utils;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
-import pro.serviceImpl.UserServiceImpl;
-import pro.serviceinterface.UserService;
+import pro.service.UserService;
 
 public class RquestParse {
-	private DataInputStream input = null;
-	private DataOutputStream out = null;
+	private ObjectInputStream input = null;
+	private ObjectOutputStream out = null;
 	private UserService userService = null;
 
-	public RquestParse(DataInputStream input, DataOutputStream out,UserService useServiceImpl) {
+	public RquestParse(ObjectInputStream input, ObjectOutputStream out, UserService useServiceImpl) {
 		this.input = input;
 		this.out = out;
 		userService = useServiceImpl;
 	}
 
-	public void parseMethod(String requestString) {
-		switch (requestString.split(":")[0]) {
+	public void parseMethod(Object requestStr) {
+		RequestProtocol rpro = (RequestProtocol)requestStr;
+		switch (rpro.getReq()) {
 		case "register":
 			try {
-				out.writeUTF(userService.register(requestString.split(":")[1].split(",")[0],
-						requestString.split(":")[1].split(",")[1]));
+				String[] strs = (String[])rpro.getObj();
+				out.writeObject(userService.register(strs[0], strs[1]));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -31,8 +31,8 @@ public class RquestParse {
 			break;
 		case "login":
 			try {
-				out.writeUTF(userService.login(requestString.split(":")[1].split(",")[0],
-						requestString.split(":")[1].split(",")[1]));
+				String[] strs = (String[])rpro.getObj();
+				out.writeObject(userService.login(strs[0], strs[1]));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -1,16 +1,15 @@
 package pro.server;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import pro.serviceImpl.UserServiceImpl;
+import pro.service.serviceImpl.UserServiceImpl;
+import pro.utils.RequestProtocol;
 import pro.utils.RquestParse;
 
-public class Server {
+public class Server{
     public static final int PORT = 8888;//监听的端口号 
 
     public static void main(String[] args) {
@@ -43,15 +42,16 @@ public class Server {
         public void run() {
             try {
                 // 读取客户端数据  
-                DataInputStream input = new DataInputStream(socket.getInputStream());
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                String clientInputStr = input.readUTF();//这里要注意和客户端输出流的写方法对应,否则会抛 EOFException
+            	ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+            	ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            	
+                System.out.println("1");
+                Object clientInputStrs = input.readObject();//这里要注意和客户端输出流的写方法对应,否则会抛 EOFException
                 // 处理客户端数据  
-                System.out.println("客户端发过来的内容:" + clientInputStr);
+                //System.out.println("客户端发过来的内容:" + clientInputStrs);
                 RquestParse rp = new RquestParse(input,out,new UserServiceImpl());
-                rp.parseMethod(clientInputStr);
-                
-                out.writeUTF("no anwser");
+                rp.parseMethod(clientInputStrs);
+                out.writeObject("no anwser !!!");
                 out.close();
                 input.close();
             } catch (Exception e) {

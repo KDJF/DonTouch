@@ -1,30 +1,32 @@
 package pro.requestmethod;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
-import pro.connection.ConnectServer;
+import pro.utils.RequestProtocol;
 
-public class LoginReq {
-		private ConnectServer con = null;
-		DataInputStream input = null;
-		DataOutputStream out = null;
-
+//µÇÂ½ÇëÇó
+public class LoginReq extends ParentReq{
+		
+	
 		public LoginReq() {
 			// TODO Auto-generated constructor stub
-			con = new ConnectServer();
-			input = con.getInput();
-			out = con.getOut();
+			super();
 		}
 		
 		public String login(String name,String passwd){
 			String result = null;
+			String[] requestStr = new String[2];
+			RequestProtocol rpro = new RequestProtocol();
 			try {
-				out.writeUTF("login:" + name + "," + passwd);
-				result = input.readUTF();
+				rpro.setReq("login");
+				requestStr[0]=name;
+				requestStr[1]=passwd;
+				rpro.setObj(requestStr);
+				out.writeObject(rpro);
+				//out.writeUTF("login:" + name + "," + passwd);
+				result = (String) input.readObject();
 				
-			} catch (IOException e) {
+			} catch (IOException | ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

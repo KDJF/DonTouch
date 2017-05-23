@@ -1,31 +1,30 @@
 package pro.requestmethod;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import pro.utils.RequestProtocol;
 
-import pro.connection.ConnectServer;
-
-public class RegisterReq {
-	private ConnectServer con = null;
-	DataInputStream input = null;
-	DataOutputStream out = null;
+//×¢²áÇëÇó
+public class RegisterReq extends ParentReq {
 
 	public RegisterReq() {
 		// TODO Auto-generated constructor stub
-		con = new ConnectServer();
-		input = con.getInput();
-		out = con.getOut();
-
+		super();
 	}
 
 	public String register(String name, String passwd) {
 		String result = null;
+		String[] requestStr = new String[2];
+		RequestProtocol rpro = new RequestProtocol();
 		try {
-			out.writeUTF("register:" + name + "," + passwd);
-			result = input.readUTF();
-			
-		} catch (IOException e) {
+			rpro.setReq("register");
+			requestStr[0] = name;
+			requestStr[1] = passwd;
+			rpro.setObj(requestStr);
+			out.writeObject(rpro);
+			// out.writeUTF("register:" + name + "," + passwd);
+			result = (String) input.readObject();
+
+		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -2,41 +2,41 @@ package com.example.david.dontouch.Fragment;
 
 
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ab.view.chart.BarChart;
-import com.ab.view.chart.CategorySeries;
-import com.ab.view.chart.ChartFactory;
-import com.ab.view.chart.PointStyle;
-import com.ab.view.chart.XYMultipleSeriesDataset;
-import com.ab.view.chart.XYMultipleSeriesRenderer;
-import com.ab.view.chart.XYSeriesRenderer;
 import com.example.david.dontouch.R;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JournalFragment extends Fragment {
+public class JournalFragment extends Fragment implements View.OnClickListener {
 
     private ViewPager vp;
     private View view1, view2, view3;
     private List<View> viewList;
     private PagerAdapter pageradapter;
-    private TextView btn_tv1,btn_tv2,btn_tv3,btn_tv4;
-    private RelativeLayout alltimes,viewingtimes;
+    private TextView btn_tv1, btn_tv2, btn_tv3, btn_tv4;
 
 
     public JournalFragment() {
@@ -49,7 +49,15 @@ public class JournalFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_journal, container, false);
         init(view);
-        xybarChart();
+        Random random = new Random();
+        ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
+        for (int i = 0; i < 7; i++) {//添加数据源
+            yVals.add(new BarEntry(random.nextInt(60), i));
+
+        }
+
+        initBarChart_duration(view, getWeek_xValues(), yVals);
+        initBarChart_times(view, getWeek_xValues(), yVals);
         return view;
     }
 
@@ -97,46 +105,15 @@ public class JournalFragment extends Fragment {
         vp.setAdapter(pageradapter);
 
 
-
         //tv1
-        btn_tv1=(TextView) view.findViewById(R.id.btn_tv1);
-        btn_tv2=(TextView) view.findViewById(R.id.btn_tv2);
-        btn_tv3=(TextView) view.findViewById(R.id.btn_tv3);
-        btn_tv4=(TextView) view.findViewById(R.id.btn_tv4);
-        btn_tv1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearSelect();
-                btn_tv1.setTextColor(Color.WHITE);
-                btn_tv1.setBackgroundResource(R.drawable.leftbtnshapetrue);
-            }
-        });
-        btn_tv2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearSelect();
-                btn_tv2.setTextColor(Color.WHITE);
-                btn_tv2.setBackgroundColor(Color.rgb(100, 149, 237));
-            }
-        });
-        btn_tv3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearSelect();
-                btn_tv3.setTextColor(Color.WHITE);
-                btn_tv3.setBackgroundColor(Color.rgb(100, 149, 237));
-            }
-        });
-        btn_tv4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearSelect();
-                btn_tv4.setTextColor(Color.WHITE);
-                btn_tv4.setBackgroundResource(R.drawable.rightbtnshapetrue);
-            }
-        });
-        alltimes=(RelativeLayout) view.findViewById(R.id.alltimes);
-        viewingtimes=(RelativeLayout) view.findViewById(R.id.viewingtimes);
+        btn_tv1 = (TextView) view.findViewById(R.id.btn_tv1);
+        btn_tv2 = (TextView) view.findViewById(R.id.btn_tv2);
+        btn_tv3 = (TextView) view.findViewById(R.id.btn_tv3);
+        btn_tv4 = (TextView) view.findViewById(R.id.btn_tv4);
+        btn_tv1.setOnClickListener(this);
+        btn_tv2.setOnClickListener(this);
+        btn_tv3.setOnClickListener(this);
+        btn_tv4.setOnClickListener(this);
     }
 
     //清空按钮颜色
@@ -154,144 +131,151 @@ public class JournalFragment extends Fragment {
 
     }
 
-    private void xybarChart(){
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        switch (v.getId()) {
+            case R.id.btn_tv1:
+                clearSelect();
+                btn_tv1.setTextColor(Color.WHITE);
+                btn_tv1.setBackgroundResource(R.drawable.leftbtnshapetrue);
+                break;
+            case R.id.btn_tv2:
+                clearSelect();
+                btn_tv2.setTextColor(Color.WHITE);
+                btn_tv2.setBackgroundColor(Color.rgb(100, 149, 237));
 
-//		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.chart01);
-        //说明文字
-        String[] titles = new String[] { "第一组", "第二组" };
-        //数据
-        List<double[]> values = new ArrayList<double[]>();
-        //每个数据点的颜色
-        List<int[]> colors = new ArrayList<int[]>();
-        //每个数据点的简要 说明
-        List<String[]> explains = new ArrayList<String[]>();
-
-        values.add(new double[] { 14230, 0, 0, 0, 15900, 17200, 12030});
-        values.add(new double[] { 5230, 0, 0, 0, 7900, 9200, 13030});
-
-        colors.add(new int[] { Color.RED, 0, 0, 0, 0, 0, 0});
-        colors.add(new int[] { 0, 0, Color.BLUE, 0, Color.GREEN, 0, 0});
-
-        explains.add(new String[] { "红色", "点2", "点3", "点4", "", "点6", ""});
-        explains.add(new String[] { "没有颜色", "没有颜色", "蓝色的点\n第二行的文字\n第三行的文字", "没有颜色\n第二行的文字\n第三行的文字\n第四行的文字\n第五行的文字", "没有颜色", "没有颜色", ""});
-
-        //柱体或者线条颜色
-        int[] mSeriescolors = new int[] { Color.rgb(153, 204, 0),Color.rgb(51, 181, 229) };
-        //创建渲染器
-        XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
-        int length = mSeriescolors.length;
-        for (int i = 1; i < length; i++) {
-            //创建SimpleSeriesRenderer单一渲染器
-            XYSeriesRenderer r = new XYSeriesRenderer();
-            //SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-            //设置渲染器颜色
-            r.setColor(mSeriescolors[i]);
-            r.setFillPoints(true);
-            r.setPointStyle(PointStyle.CIRCLE);
-            r.setLineWidth(1);
-            r.setChartValuesTextSize(16);
-            //加入到集合中
-            renderer.addSeriesRenderer(r);
+//                Random random = new Random();
+//                ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
+//                for (int i = 1; i < 8; i++) {//添加数据源
+//                    yVals.add(new BarEntry(random.nextInt(60), i));
+//
+//                }
+//
+//                initBarChart_duration(v, getWeek_xValues(), yVals);
+//                initBarChart_times(v, getWeek_xValues(), yVals);
+                break;
+            case R.id.btn_tv3:
+                clearSelect();
+                btn_tv3.setTextColor(Color.WHITE);
+                btn_tv3.setBackgroundColor(Color.rgb(100, 149, 237));
+                break;
+            case R.id.btn_tv4:
+                clearSelect();
+                btn_tv4.setTextColor(Color.WHITE);
+                btn_tv4.setBackgroundResource(R.drawable.rightbtnshapetrue);
+                break;
         }
-        //点的大小
-        renderer.setPointSize(2f);
-        //坐标轴标题文字大小
-        renderer.setAxisTitleTextSize(16);
-        //图形标题文字大小
-        renderer.setChartTitleTextSize(25);
-        //轴线上标签文字大小
-        renderer.setLabelsTextSize(15);
-        //说明文字大小
-        renderer.setLegendTextSize(15);
-        //图表标题
-//	    renderer.setChartTitle("我是图表的标题");
-        //X轴标题
-        renderer.setXTitle("X轴");
-        //Y轴标题
-        renderer.setYTitle("Y轴");
-        //X轴最小坐标点
-        renderer.setXAxisMin(0.5);
-        //X轴最大坐标点
-        renderer.setXAxisMax(7.5);
-        //Y轴最小坐标点
-        renderer.setYAxisMin(0);
-        //Y轴最大坐标点
-        renderer.setYAxisMax(24000);
-        //坐标轴颜色
-        renderer.setAxesColor(Color.rgb(51, 181, 229));
-        renderer.setXLabelsColor(Color.rgb(51, 181, 229));
-        renderer.setYLabelsColor(0,Color.rgb(51, 181, 229));
-        //设置图表上标题与X轴与Y轴的说明文字颜色
-        renderer.setLabelsColor(Color.GRAY);
-        //renderer.setGridColor(Color.GRAY);
-        //设置字体加粗
-        renderer.setTextTypeface("sans_serif", Typeface.BOLD);
-        //设置在图表上是否显示值标签
-        renderer.getSeriesRendererAt(0).setDisplayChartValues(true);
-//	    renderer.getSeriesRendererAt(1).setDisplayChartValues(true);
-        //显示屏幕可见取区的XY分割数
-        renderer.setXLabels(7);
-        renderer.setYLabels(10);
-        //X刻度标签相对X轴位置
-        renderer.setXLabelsAlign(Paint.Align.CENTER);
-        //Y刻度标签相对Y轴位置
-        renderer.setYLabelsAlign(Paint.Align.LEFT);
-        renderer.setPanEnabled(true, false);
-        renderer.setZoomEnabled(true);
-        renderer.setZoomButtonsVisible(true);
-        renderer.setZoomRate(1.1f);
-        renderer.setBarSpacing(0.5f);
+    }
 
-        //标尺开启
-        renderer.setScaleLineEnabled(false);
-        //设置标尺提示框高
-        renderer.setScaleRectHeight(60);
-        //设置标尺提示框宽
-        renderer.setScaleRectWidth(150);
-        //设置标尺提示框背景色
-        renderer.setScaleRectColor(Color.argb(150, 52, 182, 232));
-        renderer.setScaleLineColor(Color.argb(175, 150, 150, 150));
-        renderer.setScaleCircleRadius(35);
-        //第一行文字的大小
-        renderer.setExplainTextSize1(20);
-        //第二行文字的大小
-        renderer.setExplainTextSize2(20);
+    private void initBarChart_duration(View view, ArrayList<String> xVals, ArrayList<BarEntry> yVals) {
+        BarChart barchart = (BarChart) view.findViewById(R.id.barchart_total_duration);
+//        ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
 
-        //临界线
-        double[] limit = new double[]{15000,12000,4000,9000};
-        renderer.setmYLimitsLine(limit);
-        int[] colorsLimit = new int[] { Color.rgb(100, 255,255),Color.rgb(100, 255,255),Color.rgb(0, 255, 255),Color.rgb(0, 255, 255) };
-        renderer.setmYLimitsLineColor(colorsLimit);
+        BarDataSet barDataSet = new BarDataSet(yVals, "总时长");
 
-        //显示表格线
-        renderer.setShowGrid(true);
+        barDataSet.setColor(Color.rgb(20, 185, 214));//设置第一组数据颜色
 
-        //如果值是0是否要显示
-        renderer.setDisplayValue0(true);
-        //创建渲染器数据填充器
-        XYMultipleSeriesDataset mXYMultipleSeriesDataset = new XYMultipleSeriesDataset();
-        for (int i = 1; i < length; i++) {
-            CategorySeries series = new CategorySeries(titles[i]);
-            double[] v = values.get(i);
-            int[] c = colors.get(i);
-            String[] e = explains.get(i);
-            int seriesLength = v.length;
-            for (int k = 0; k < seriesLength; k++) {
-                //设置每个点的颜色
-                series.add(v[k],c[k],e[k]);
-            }
-            mXYMultipleSeriesDataset.addSeries(series.toXYSeries());
+        ArrayList<IBarDataSet> onebardata = new ArrayList<>();//IBarDataSet 接口很关键，是添加多组数据的关键结构，LineChart也是可以采用对应的接口类，也可以添加多组数据
+        onebardata.add(barDataSet);
+
+        BarData bardata = new BarData(xVals, onebardata);
+        barchart.setData(bardata);
+        barchart.getLegend().setPosition(Legend.LegendPosition.ABOVE_CHART_LEFT);//设置注解的位置在左上方
+        barchart.getLegend().setForm(Legend.LegendForm.CIRCLE);//这是左边显示小图标的形状
+        barchart.getLegend().setTextColor(Color.BLACK);
+        barchart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置
+        barchart.getXAxis().setDrawGridLines(false);//不显示网格
+
+        barchart.getAxisRight().setEnabled(false);//右侧不显示Y轴
+        barchart.getAxisLeft().setAxisMinValue(0.0f);//设置Y轴显示最小值，不然0下面会有空隙
+        barchart.getAxisLeft().setDrawGridLines(false);//不设置Y轴网格
+
+        barchart.setDescription("");//设置描述
+        barchart.setDescriptionTextSize(20.f);//设置描述字体
+//        barchart.animateXY(1000, 2000);//设置动画
+
+    }
+
+    private void initBarChart_times(View view, ArrayList<String> xVals, ArrayList<BarEntry> yVals) {
+        BarChart barchart = (BarChart) view.findViewById(R.id.barchart_total_times);
+//        ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
+
+        BarDataSet barDataSet = new BarDataSet(yVals, "总次数");
+
+        barDataSet.setColor(Color.rgb(20, 185, 214));//设置第一组数据颜色
+
+        ArrayList<IBarDataSet> onebardata = new ArrayList<>();//IBarDataSet 接口很关键，是添加多组数据的关键结构，LineChart也是可以采用对应的接口类，也可以添加多组数据
+        onebardata.add(barDataSet);
+
+        BarData bardata = new BarData(xVals, onebardata);
+        barchart.setData(bardata);
+        barchart.getLegend().setPosition(Legend.LegendPosition.ABOVE_CHART_LEFT);//设置注解的位置在左上方
+        barchart.getLegend().setForm(Legend.LegendForm.CIRCLE);//这是左边显示小图标的形状
+        barchart.getLegend().setTextColor(Color.BLACK);
+        barchart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置
+        barchart.getXAxis().setDrawGridLines(false);//不显示网格
+
+        barchart.getAxisRight().setEnabled(false);//右侧不显示Y轴
+        barchart.getAxisLeft().setAxisMinValue(0.0f);//设置Y轴显示最小值，不然0下面会有空隙
+        barchart.getAxisLeft().setDrawGridLines(false);//不设置Y轴网格
+
+        barchart.setDescription("");//设置描述
+        barchart.setDescriptionTextSize(20.f);//设置描述字体
+//        barchart.animateXY(1000, 2000);//设置动画
+
+    }
+
+    private ArrayList<String> getDay_xValues() {
+
+        ArrayList<String> xValues = new ArrayList<>();//X轴数据
+        SimpleDateFormat formatter = new SimpleDateFormat("dd");
+        Date curDate = new Date(System.currentTimeMillis());
+        String day = formatter.format(curDate);// 获取当前月份的日期号码
+        Log.i("day", day);
+        formatter = new SimpleDateFormat("E");
+        String week = formatter.format(curDate);// 获取当前月份的日期号码
+        Log.i("week", week);
+
+        for (int i = 1; i < 25; i++) {//添加数据源
+            if (i < 10)
+                xValues.add("0" + i + "h");
+            else
+                xValues.add(i + "h");
         }
-        //背景
-        renderer.setApplyBackgroundColor(true);
-        renderer.setBackgroundColor(Color.WHITE);
-        renderer.setMarginsColor(Color.WHITE);
+//        xValues.add(day);
+        return xValues;
+    }
 
-        //线图
-        View chart = ChartFactory.getBarChartView(getContext(),mXYMultipleSeriesDataset,renderer, BarChart.Type.DEFAULT);
-        View chart2 = ChartFactory.getBarChartView(getContext(),mXYMultipleSeriesDataset,renderer,BarChart.Type.DEFAULT);
-        alltimes.addView(chart);
-        viewingtimes.addView(chart2);
 
+    private ArrayList<String> getWeek_xValues() {
+
+        ArrayList<String> xValues = new ArrayList<>();//X轴数据
+        ArrayList<String> weeks = new ArrayList<>();
+        weeks.add("周日");
+        weeks.add("周一");
+        weeks.add("周二");
+        weeks.add("周三");
+        weeks.add("周四");
+        weeks.add("周五");
+        weeks.add("周六");
+
+
+        SimpleDateFormat formatter = new SimpleDateFormat("E");
+        Date curDate = new Date(System.currentTimeMillis());
+        String week = formatter.format(curDate);// 获取当前月份的日期号码
+        int current = weeks.indexOf(week);
+
+        for (int  i=6;i>current;i--){
+            xValues.add(weeks.get(i));
+        }
+        for (int  i=0;i<current+1;i++){
+            xValues.add(weeks.get(i));
+        }
+
+
+        Log.i("xValues",xValues.get(0)+xValues.get(1)+
+                xValues.get(2)+xValues.get(3)+xValues.get(4)+xValues.get(5)+xValues.get(6));
+        return xValues;
     }
 }

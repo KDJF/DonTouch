@@ -1,39 +1,202 @@
-<android.support.v4.app.FragmentTabHost xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tabhost"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.david.dontouch.Fragment.JournalFragment">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/cornflowerblue" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="发现"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp"
+            android:layout_width="match_parent"
+            android:layout_height="75dp" >
+        </android.support.v4.view.ViewPager>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#ffffff"
         android:orientation="vertical" >
 
-        <!-- 调换framelayout和tabwidget的前后顺序可以分别实现tab的top和在底下的效果 -->
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-        </TabWidget>
+        <View android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="#6495ED"/>
 
-        <!-- tabhost上面一条黑色分割 @drawable/line_shop -->
-        <View
-            android:id="@+id/view_2"
-            android:layout_width="fill_parent"
-            android:layout_height="0.1dip"
-            android:background="#D1D1D1" >
-        </View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/yuanjiaojuxing"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
-        <!-- 这里是tab选项卡的内容 ，宽度要填满，高度自动适应 -->
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1" >
-        </FrameLayout>
+            <TextView
+                android:id="@+id/btn_tv1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/leftbtnshapefalse"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="第一个"
+                android:textColor="@color/cornflowerblue" />
+
+            <TextView
+                android:id="@+id/btn_tv2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:text="第二个"
+                android:textColor="@color/cornflowerblue" />
+
+            <TextView
+                android:id="@+id/btn_tv3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:text="第三个"
+                android:textColor="@color/cornflowerblue" />
+
+            <TextView
+                android:id="@+id/btn_tv4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rightbtnshapefalse"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="第四个"
+                android:textColor="@color/cornflowerblue" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp" >
+
+                <TextView
+                    android:id="@+id/tv_alltimes_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="总时长"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_alltimes_avg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_alltimes_title"
+                    android:text="每小时平均：3分钟" />
+
+                <TextView
+                    android:id="@+id/tv_alltimes_alltime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/tv_alltimes_avg"
+                    android:layout_alignBottom="@+id/tv_alltimes_avg"
+                    android:layout_alignParentRight="true"
+                    android:paddingRight="0dp"
+                    android:text="总时长：0.2小时" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/alltimes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ececec" >
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp" >
+
+                <TextView
+                    android:id="@+id/tv_viewingtimes_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="查看次数"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_viewingtimes_avg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_viewingtimes_title"
+                    android:text="每小时平均：5" />
+
+                <TextView
+                    android:id="@+id/tv_viewingtimes_alltime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/tv_viewingtimes_avg"
+                    android:layout_alignBottom="@+id/tv_viewingtimes_avg"
+                    android:layout_alignParentRight="true"
+                    android:paddingRight="0dp"
+                    android:text="总次数：5" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/viewingtimes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ececec">
+            </RelativeLayout>
+        </LinearLayout>
+
 
     </LinearLayout>
 
-</android.support.v4.app.FragmentTabHost>
+</LinearLayout>

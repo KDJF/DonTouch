@@ -1,5 +1,7 @@
 package pro.service.serviceImpl;
 
+import java.util.ArrayList;
+
 import pro.service.UserService;
 import pro.utils.RedisUtil;
 import redis.clients.jedis.Jedis;
@@ -12,6 +14,7 @@ public class UserServiceImpl implements UserService{
 		jedis = RedisUtil.getJedis();
 	}
 
+	@Override
 	public String register(String name, String passwd) {
 		if (jedis.exists(name+":name")) {
 			return "fail:username has existed";
@@ -22,6 +25,7 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 	
+	@Override
 	public String login(String name,String passwd){
 		if(!jedis.exists(name+":name")){
 			return "fail:username is not exist";
@@ -30,6 +34,22 @@ public class UserServiceImpl implements UserService{
 		}else{
 			return "success";
 		}
+	}
+
+	@Override
+	public String savawhitelist(String name, ArrayList<String> whitelist) {
+		// TODO Auto-generated method stub
+		if(!jedis.exists(name+":name")){
+			return "fail:username is not exist";
+		}else if(whitelist == null){
+			return "fail:empty list";
+		}else{
+			for (int i = 0; i < whitelist.size(); i++) {
+				jedis.lpush(name+":white-list", whitelist.get(i));
+			}
+			return "success";
+		}
+		
 	}
 
 }

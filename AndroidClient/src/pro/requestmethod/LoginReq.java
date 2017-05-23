@@ -1,8 +1,8 @@
 package pro.requestmethod;
 
 import java.io.IOException;
+import java.util.HashMap;
 
-import pro.utils.RequestProtocol;
 
 //µÇÂ½ÇëÇó
 public class LoginReq extends ParentReq{
@@ -16,12 +16,12 @@ public class LoginReq extends ParentReq{
 		public String login(String name,String passwd){
 			String result = null;
 			String[] requestStr = new String[2];
-			RequestProtocol rpro = new RequestProtocol();
+			HashMap<String,Object> rpro = new HashMap<String,Object>();
 			try {
-				rpro.setReq("login");
+				rpro.put("req", "login");
 				requestStr[0]=name;
 				requestStr[1]=passwd;
-				rpro.setObj(requestStr);
+				rpro.put("value", requestStr);
 				out.writeObject(rpro);
 				//out.writeUTF("login:" + name + "," + passwd);
 				result = (String) input.readObject();

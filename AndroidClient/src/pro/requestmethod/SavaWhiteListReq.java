@@ -1,25 +1,23 @@
 package pro.requestmethod;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-//×¢²áÇëÇó
-public class RegisterReq extends ParentReq {
-
-	public RegisterReq() {
+public class SavaWhiteListReq extends ParentReq{
+	
+	public SavaWhiteListReq() {
 		// TODO Auto-generated constructor stub
 		super();
 	}
-
-	public String register(String name, String passwd) {
+	
+	public String savewhitelist(String username,ArrayList<String> whitelist){
 		String result = null;
-		String[] requestStr = new String[2];
 		HashMap<String, Object> rpro = new HashMap<String, Object>();
 		try {
-			rpro.put("req", "register");
-			requestStr[0] = name;
-			requestStr[1] = passwd;
-			rpro.put("value", requestStr);
+			rpro.put("req", "savewhitelist");
+			rpro.put("value1", username);
+			rpro.put("value2", whitelist);
 			out.writeObject(rpro);
 			// out.writeUTF("register:" + name + "," + passwd);
 			result = (String) input.readObject();
@@ -30,9 +28,12 @@ public class RegisterReq extends ParentReq {
 		}
 		return result;
 	}
-
+	
 	public static void main(String[] args) {
-		RegisterReq r = new RegisterReq();
-		System.out.println(r.register("shaojie", "666"));
+		SavaWhiteListReq swr = new SavaWhiteListReq();
+		ArrayList<String> whitelist = new ArrayList<String>();
+		whitelist.add("1");
+		whitelist.add("2");
+		System.out.println(swr.savewhitelist("shaojie", whitelist));
 	}
 }

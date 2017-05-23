@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment {
         ArrayList<String> xVals = new ArrayList<>();//X轴数据
 
         for (int i = 1; i < 25; i++) {//添加数据源
-            if (i < 12)
+            if (i < 10)
                 xVals.add("0" + i + "h");
             else
                 xVals.add(i + "h");

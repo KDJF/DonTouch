@@ -45,7 +45,6 @@ public class Server{
             	ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
             	ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             	
-                System.out.println("1");
                 Object clientInputStrs = input.readObject();//这里要注意和客户端输出流的写方法对应,否则会抛 EOFException
                 // 处理客户端数据  
                 //System.out.println("客户端发过来的内容:" + clientInputStrs);

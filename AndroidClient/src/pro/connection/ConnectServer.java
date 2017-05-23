@@ -13,7 +13,7 @@ public class ConnectServer {
 	public ConnectServer() {
 		// TODO Auto-generated constructor stub
 		try {
-			this.socket = new Socket("localhost", 8888);
+			this.socket = new Socket("172.29.117.122", 8888);
 			this.out = new ObjectOutputStream(socket.getOutputStream());
 			this.input = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {

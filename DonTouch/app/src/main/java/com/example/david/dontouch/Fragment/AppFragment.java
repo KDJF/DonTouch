@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,7 +26,6 @@ public class AppFragment extends Fragment {
 
     private ArrayList<AppItemInfo> list;
     private ListView listview;
-    private Button refresh ;
     private baseAdapter mAdapter;
     private View view;
 
@@ -56,15 +54,6 @@ public class AppFragment extends Fragment {
         list = UStats.getUsageStatsList(view.getContext());
         mAdapter = new baseAdapter(list) ;
         listview.setAdapter(mAdapter);
-        refresh = (Button) view.findViewById(R.id.refresh);
-        refresh.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //list = UStats.getUsageStatsList(view.getContext());
-                //mAdapter.notifyDataSetChanged();
-            }
-        });
         return view;
     }
 

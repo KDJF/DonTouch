@@ -28,8 +28,8 @@ public class AssessFragment  extends Fragment {
         mTabHost = (FragmentTabHost ) view.findViewById(R.id.tabhost);
         mTabHost.setup(view.getContext(), getChildFragmentManager(), android.R.id.tabcontent);
         mTabHost.getTabWidget().setDividerDrawable(null);
-        FragmentTabHost.TabSpec tabSpec_1 = mTabHost.newTabSpec("sw").setIndicator("sw");
-        FragmentTabHost.TabSpec tabSpec_2 = mTabHost.newTabSpec("tt").setIndicator("tt");
+        FragmentTabHost.TabSpec tabSpec_1 = mTabHost.newTabSpec("sr").setIndicator("软件排行");
+        FragmentTabHost.TabSpec tabSpec_2 = mTabHost.newTabSpec("fr").setIndicator("好友排行");
         mTabHost.addTab(tabSpec_1, AppFragment.class, null);
         mTabHost.addTab(tabSpec_2, RankFragment.class, null);
 

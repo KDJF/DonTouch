@@ -4,18 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.example.david.dontouch.Fragment.AssessFragment">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <!-- 调换framelayout和tabwidget的前后顺序可以分别实现tab的top和在底下的效果 -->
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@color/white">
         </TabWidget>
 
         <!-- tabhost上面一条黑色分割 @drawable/line_shop -->

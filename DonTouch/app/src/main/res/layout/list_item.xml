@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:paddingLeft="5dp"
     android:paddingRight="5dp" >
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/apps_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -25,8 +25,9 @@
         android:id="@+id/apps_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/apps_name"
         android:maxWidth="100dp"
-        android:text="" />
+        android:text="10000毫秒"
+        android:layout_marginEnd="22dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

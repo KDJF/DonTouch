@@ -4,6 +4,7 @@ import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -64,7 +65,9 @@ public class UStats {
             ai.setLabel(packageName);
             ai.setIcon(getProgramIcon(context, packageName));
             ai.setStartTime(usageStats.getTotalTimeInForeground());
-            list.add(ai);
+            if (!isSystemProgram(context, packageName)) {
+                list.add(ai);
+            }
         }
         return list;
     }
@@ -81,15 +84,42 @@ public class UStats {
         return name;
     }
 
+    public static String getProgramLabel(Context context, String packageName) {
+        PackageManager pm = context.getPackageManager();
+        String name = null;
+        try {
+            name = pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+
+    public static boolean isSystemProgram(Context context, String packageName) {
+        PackageManager pm = context.getPackageManager();
+        boolean flag = false;
+        try {
+            ApplicationInfo applicationInfo = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+            if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0 ) {
+                flag = true;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
     public static ArrayList<AppItemInfo> printUsageStats(Context context, List<UsageStats> usageStatsList){
         ArrayList<AppItemInfo> list = new ArrayList<>();
         AppItemInfo ai = null;
         for (UsageStats u : usageStatsList){
             String packageName = u.getPackageName();
-            ai.setLabel(packageName);
+            ai.setLabel(getProgramLabel(context, packageName));
             ai.setIcon(getProgramIcon(context, packageName));
             ai.setStartTime(u.getTotalTimeInForeground());
-            list.add(ai);
+            if (!isSystemProgram(context, packageName)) {
+                list.add(ai);
+            }
             Log.d(TAG, "Pkg: " + u.getPackageName() +  "\t" + "ForegroundTime: "
                     + u.getTotalTimeInForeground()) ;
         }

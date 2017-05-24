@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.david.dontouch.R;
+import com.example.david.dontouch.Util.UStats;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,18 +81,17 @@ public class WhiteListActivity extends Activity {
         List<PackageInfo> apps = new ArrayList<PackageInfo>();
         PackageManager pManager = context.getPackageManager();
         // 获取手机内所有应用  
-        List<PackageInfo> packlist = pManager.getInstalledPackages(0);
-        for (int i = 0; i < packlist.size(); i++) {
-            PackageInfo pak = (PackageInfo) packlist.get(i);
-
+        List<PackageInfo> packagelist = pManager.getInstalledPackages(0);
+        for (int i = 0; i < packagelist.size(); i++) {
+            PackageInfo pak = packagelist.get(i);
+            String packageName = pak.packageName;
             // 判断是否为非系统预装的应用程序  
             // 这里还可以添加系统自带的，这里就先不添加了，如果有需要可以自己添加  
             // if()里的值如果<=0则为自己装的程序，否则为系统工程自带  
-            if ((pak.applicationInfo.flags & pak.applicationInfo.FLAG_SYSTEM) <= 0) {
+            if (!UStats.isSystemProgram(context, packageName)) {
                 // 添加自己已经安装的应用程序  
                 apps.add(pak);
             }
-
         }
         return apps;
     }
@@ -99,8 +99,6 @@ public class WhiteListActivity extends Activity {
     private class baseAdapter extends BaseAdapter {
 
         List<Boolean> mChecked;
-//        HashMap<Integer,View> map = new HashMap<Integer,View>();
-
         LayoutInflater inflater = LayoutInflater.from(WhiteListActivity.this);
 
         public baseAdapter() {

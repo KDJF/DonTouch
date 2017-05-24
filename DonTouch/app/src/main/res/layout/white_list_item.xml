@@ -10,7 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:icon="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher_round" />
 
     <TextView
         android:id="@+id/apps_textview"

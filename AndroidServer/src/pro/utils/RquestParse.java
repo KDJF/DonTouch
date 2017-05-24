@@ -24,7 +24,7 @@ public class RquestParse {
 		switch ((String) rpro.get("req")) {
 		case "register":
 			try {
-				String[] strs = (String[]) rpro.get("value");
+				String[] strs = (String[]) rpro.get("value1");
 				out.writeObject(userService.register(strs[0], strs[1]));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -41,10 +41,19 @@ public class RquestParse {
 			}
 			break;
 		case "savewhitelist":
-			String username = (String)rpro.get("value1");
-			ArrayList<String> whitelist = (ArrayList<String>)rpro.get("value2");
 			try {
+				String username = (String)rpro.get("value1");
+				ArrayList<String> whitelist = (ArrayList<String>)rpro.get("value2");
 				out.writeObject(userService.savawhitelist(username, whitelist));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "readwhitelist":
+			try {
+				String username = (String)rpro.get("value1");
+				out.writeObject(userService.readwhitelist(username));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -9,4 +9,6 @@ public interface UserService {
 	public String login(String name,String passwd);
 	//储存白名单
 	public String savawhitelist(String name, ArrayList<String> whitelist);
+	//读取白名单
+	public ArrayList<String> readwhitelist(String name);
 }

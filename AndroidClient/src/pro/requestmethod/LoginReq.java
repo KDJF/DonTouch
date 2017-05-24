@@ -21,7 +21,7 @@ public class LoginReq extends ParentReq{
 				rpro.put("req", "login");
 				requestStr[0]=name;
 				requestStr[1]=passwd;
-				rpro.put("value", requestStr);
+				rpro.put("value1", requestStr);
 				out.writeObject(rpro);
 				//out.writeUTF("login:" + name + "," + passwd);
 				result = (String) input.readObject();

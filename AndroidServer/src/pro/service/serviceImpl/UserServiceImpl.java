@@ -52,4 +52,16 @@ public class UserServiceImpl implements UserService{
 		
 	}
 
+	@Override
+	public ArrayList<String> readwhitelist(String name) {
+		// TODO Auto-generated method stub
+		ArrayList<String> whitelist = null;
+		if(!jedis.exists(name+":name")){
+			return whitelist;
+		}else{
+			whitelist = (ArrayList<String>) jedis.lrange(name+":white-list", 0, -1);
+			return whitelist;
+		}
+	}
+
 }

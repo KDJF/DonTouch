@@ -13,11 +13,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.example.david.dontouch.Activity.CountTimeDownActivity;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.View.NotifProgressView;
 import com.example.david.dontouch.View.SelfDialog;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

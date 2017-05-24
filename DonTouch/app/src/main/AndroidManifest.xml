@@ -45,6 +45,7 @@
             android:label="@string/title_activity_count_down"
             android:theme="@style/FullscreenTheme" />
         <activity android:name=".Activity.CountTimeDownActivity"></activity>
+        <activity android:name=".Activity.WhiteListActivity"></activity>
     </application>
 
 </manifest>

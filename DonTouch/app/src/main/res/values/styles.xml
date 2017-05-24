@@ -34,4 +34,8 @@
     <item name="android:windowNoTitle">true</item>
 </style>
 
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/gray</item>
+        <item name="colorControlActivated">@color/ring_color</item>
+    </style>
 </resources>

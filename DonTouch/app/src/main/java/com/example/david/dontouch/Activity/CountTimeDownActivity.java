@@ -1,54 +1,48 @@
 package com.example.david.dontouch.Activity;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TimePicker;
 
 import com.example.david.dontouch.R;
-import com.example.david.dontouch.Util.CommonUtil;
-
-import java.util.Calendar;
+import com.example.david.dontouch.View.CircleSeekBar;
 
 public class CountTimeDownActivity extends AppCompatActivity {
-    private Button button;
     private Activity activity;
-    private TimePicker timePicker;
     private int hour;
     private int min;
-    private Calendar calendar;
     private int hour_now;
     private int min_now;
+    private final boolean DEBUG = true;
+    private final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = this;
+        //activity = this;
         //CommonUtil.setNoTitleBar(activity);
-        CommonUtil.setFullScreen(activity);
+        //CommonUtil.setFullScreen(activity);
         setContentView(R.layout.activity_count_time_down);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        CircleSeekBar circleSeekBar = (CircleSeekBar) findViewById(R.id.circle_seekbar);
+        circleSeekBar.setProgress(100);
+        circleSeekBar.setOnSeekBarChangeListener(new CircleSeekBarOnChangeListener());
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
             // Translucent status bar
             window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
+        }*/
         //透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //透明导航栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         init();
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -58,25 +52,44 @@ public class CountTimeDownActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        });
+        });*/
 
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+        /*timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 hour = hourOfDay;
                 min = minute;
 
             }
-        });
+        });*/
+    }
+
+    private class CircleSeekBarOnChangeListener implements CircleSeekBar.OnSeekBarChangeListener {
+
+        @Override
+        public void onProgressChanged(int progress) {
+            if(DEBUG) Log.d(TAG, "onProgressChanged progress = " + progress);
+        }
+
+        @Override
+        public void onStartTrackingTouch() {
+            if(DEBUG) Log.d(TAG, "onStartTrackingTouch");
+        }
+
+        @Override
+        public void onStopTrackingTouch() {
+            if(DEBUG) Log.d(TAG, "onStopTrackingTouch");
+        }
+
     }
 
     public void init() {
         long time = System.currentTimeMillis();
-        button = (Button) findViewById(R.id.count_down_btn);
-        timePicker = (TimePicker) findViewById(R.id.time_picker);
-        calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        hour_now = calendar.get(Calendar.HOUR);
-        min_now = calendar.get(Calendar.MINUTE);
+        //button = (Button) findViewById(R.id.count_down_btn);
+        //timePicker = (TimePicker) findViewById(R.id.time_picker);
+        //calendar = Calendar.getInstance();
+        //calendar.setTimeInMillis(time);
+        //hour_now = calendar.get(Calendar.HOUR);
+        //min_now = calendar.get(Calendar.MINUTE);
     }
 }

@@ -26,6 +26,7 @@ import com.example.david.dontouch.Fragment.JournalFragment;
 import com.example.david.dontouch.Fragment.NotifFragment;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.Util.BottomNavigationViewHelper;
+import com.example.david.dontouch.Util.ScreenObserver;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity
     NotifFragment notifFragment;
     MenuItem prevMenuItem;
     BottomNavigationView navigation;
+    private String TAG = "ScreenObserverActivity";
+    private ScreenObserver mScreenObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,33 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setupViewPager(viewPager);
+        mScreenObserver = new ScreenObserver(this);
+        mScreenObserver.requestScreenStateUpdate(new ScreenObserver.ScreenStateListener() {
+            @Override
+            public void onScreenOn() {
+                doSomethingOnScreenOn();
+            }
+
+            @Override
+            public void onScreenOff() {
+                doSomethingOnScreenOff();
+            }
+        });
+    }
+
+    private void doSomethingOnScreenOn() {
+        Log.i(TAG, "Screen is on");
+    }
+
+    private void doSomethingOnScreenOff() {
+        Log.i(TAG, "Screen is off");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //停止监听screen状态
+        mScreenObserver.stopScreenStateUpdate();
     }
 
 

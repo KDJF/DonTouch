@@ -6,92 +6,147 @@ package com.example.david.dontouch.Activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.david.dontouch.R;
-import com.example.david.dontouch.Util.UStats;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class WhiteListActivity extends Activity {
 
-    // 用来记录应用程序的信息  
+    // 用来记录应用程序的信息
     List<AppsItemInfo> list;
 
+    private Switch white_list_switch;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
     private ListView listview;
     private PackageManager pManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub  
+        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_whitelist);
 
-        // 取得listview  
+        sp = getSharedPreferences("white_list", 0);
+        editor = sp.edit();
+
+        //临时加入switch
+//        editor.putBoolean("white_list_switch", true);
+//        editor.commit();
+        ////////
+
         listview = (ListView) findViewById(R.id.list_white);
+        white_list_switch = (Switch) findViewById(R.id.switch_white);
+        if (sp.getBoolean("white_list_switch", false)) {
 
-        // 获取图片、应用名、包名  
-        pManager = WhiteListActivity.this.getPackageManager();
-        List<PackageInfo> appList = getAllApps(WhiteListActivity.this);
+            listview.setVisibility(View.VISIBLE);
+            white_list_switch.setChecked(true);
+            // 获取图片、应用名、包名
+            pManager = WhiteListActivity.this.getPackageManager();
+            List<PackageInfo> appList = getAllApps(WhiteListActivity.this);
 
-        list = new ArrayList<AppsItemInfo>();
+            list = new ArrayList<AppsItemInfo>();
 
-        for (int i = 0; i < appList.size(); i++) {
-            PackageInfo pinfo = appList.get(i);
-            AppsItemInfo shareItem = new AppsItemInfo();
-            // 设置图片  
-            shareItem.setIcon(pManager
-                    .getApplicationIcon(pinfo.applicationInfo));
-            // 设置应用程序名字  
-            shareItem.setLabel(pManager.getApplicationLabel(
-                    pinfo.applicationInfo).toString());
-            // 设置应用程序的包名  
-            shareItem.setPackageName(pinfo.applicationInfo.packageName);
+            for (int i = 0; i < appList.size(); i++) {
+                PackageInfo pinfo = appList.get(i);
+                AppsItemInfo shareItem = new AppsItemInfo();
+                // 设置图片
+                shareItem.setIcon(pManager
+                        .getApplicationIcon(pinfo.applicationInfo));
+                // 设置应用程序名字
+                shareItem.setLabel(pManager.getApplicationLabel(
+                        pinfo.applicationInfo).toString());
+                // 设置应用程序的包名
+                shareItem.setPackageName(pinfo.applicationInfo.packageName);
 
-            list.add(shareItem);
+                list.add(shareItem);
 
+            }
+
+            // 设置listview的Adapter
+            listview.setAdapter(new baseAdapter());
         }
 
-        // 设置listview的Adapter  
-        listview.setAdapter(new baseAdapter());
+        white_list_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    editor.putBoolean("white_list_switch", true);
+                    editor.commit();
 
-        // 点击应用图标时，做出响应  
-        listview.setOnItemClickListener(new ClickListener());
+                    // 获取图片、应用名、包名
+                    pManager = WhiteListActivity.this.getPackageManager();
+                    List<PackageInfo> appList = getAllApps(WhiteListActivity.this);
 
+                    list = new ArrayList<AppsItemInfo>();
+
+                    for (int i = 0; i < appList.size(); i++) {
+                        PackageInfo pinfo = appList.get(i);
+                        AppsItemInfo shareItem = new AppsItemInfo();
+                        // 设置图片
+                        shareItem.setIcon(pManager
+                                .getApplicationIcon(pinfo.applicationInfo));
+                        // 设置应用程序名字
+                        shareItem.setLabel(pManager.getApplicationLabel(
+                                pinfo.applicationInfo).toString());
+                        // 设置应用程序的包名
+                        shareItem.setPackageName(pinfo.applicationInfo.packageName);
+                        list.add(shareItem);
+
+                    }
+
+                    // 设置listview的Adapter
+                    listview.setAdapter(new baseAdapter());
+                    listview.setVisibility(View.VISIBLE);
+
+                } else {
+                    editor.putBoolean("white_list_switch", false);
+                    editor.commit();
+                    listview.setVisibility(View.INVISIBLE);
+
+                }
+
+
+            }
+        });
     }
 
     public static List<PackageInfo> getAllApps(Context context) {
 
         List<PackageInfo> apps = new ArrayList<PackageInfo>();
         PackageManager pManager = context.getPackageManager();
-        // 获取手机内所有应用  
-        List<PackageInfo> packagelist = pManager.getInstalledPackages(0);
-        for (int i = 0; i < packagelist.size(); i++) {
-            PackageInfo pak = packagelist.get(i);
-            String packageName = pak.packageName;
-            // 判断是否为非系统预装的应用程序  
-            // 这里还可以添加系统自带的，这里就先不添加了，如果有需要可以自己添加  
-            // if()里的值如果<=0则为自己装的程序，否则为系统工程自带  
-            if (!UStats.isSystemProgram(context, packageName)) {
-                // 添加自己已经安装的应用程序  
+        // 获取手机内所有应用
+        List<PackageInfo> packlist = pManager.getInstalledPackages(0);
+        for (int i = 0; i < packlist.size(); i++) {
+            PackageInfo pak = (PackageInfo) packlist.get(i);
+
+            // 判断是否为非系统预装的应用程序
+            // 这里还可以添加系统自带的，这里就先不添加了，如果有需要可以自己添加
+            // if()里的值如果<=0则为自己装的程序，否则为系统工程自带
+            if ((pak.applicationInfo.flags & pak.applicationInfo.FLAG_SYSTEM) <= 0) {
+                // 添加自己已经安装的应用程序
                 apps.add(pak);
             }
+
         }
         return apps;
     }
@@ -99,61 +154,109 @@ public class WhiteListActivity extends Activity {
     private class baseAdapter extends BaseAdapter {
 
         List<Boolean> mChecked;
+
         LayoutInflater inflater = LayoutInflater.from(WhiteListActivity.this);
 
+        Set<String> apps;
+        List<String> packagenames;
+
         public baseAdapter() {
-            mChecked=new ArrayList<Boolean>();
+            apps = sp.getStringSet("white_list_apps", new HashSet<String>());
+            mChecked = new ArrayList<Boolean>();
+            packagenames = new ArrayList<String>();
             for (int i = 0; i < list.size(); i++) {
                 mChecked.add(false);
+                packagenames.add(list.get(i).getPackageName());
             }
+            System.out.println("mChecked初始化:   "+mChecked.size() + mChecked);
+            System.out.println("apps初始化:   " + apps.size() + apps);
+            for (String temp : apps) {
+                int index = packagenames.indexOf(temp);
+                mChecked.set(index, true);
+            }
+            System.out.println("第一次修改后的mChecked:   " + mChecked.size() + mChecked);
+
         }
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub  
+            // TODO Auto-generated method stub
             return list.size();
         }
 
         @Override
         public Object getItem(int position) {
-            // TODO Auto-generated method stub  
+            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
         public long getItemId(int position) {
-            // TODO Auto-generated method stub  
+            // TODO Auto-generated method stub
             return position;
         }
 
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub  
+        public View getView(final int position, View convertView, final ViewGroup parent) {
+            // TODO Auto-generated method stub
             ViewHolder holder;
-//            if (convertView == null) {
-//            if (map.get(position) == null) {7
-                // 使用View的对象itemView与R.layout.item关联
-                convertView = inflater.inflate(R.layout.white_list_item, null);
-                holder = new ViewHolder();
-                holder.icon = (ImageView) convertView
-                        .findViewById(R.id.apps_image);
-                holder.label = (TextView) convertView
-                        .findViewById(R.id.apps_textview);
-                holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
-//                map.put(position, convertView);
-                holder.checkBox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        CheckBox cb = (CheckBox) view;
-                        mChecked.set(position, cb.isChecked());
-                        Log.i("package_name",list.get(position).getLabel().toString());
+
+
+            convertView = inflater.inflate(R.layout.white_list_item, null);
+            holder = new ViewHolder();
+            holder.icon = (ImageView) convertView
+                    .findViewById(R.id.apps_image);
+            holder.label = (TextView) convertView
+                    .findViewById(R.id.apps_textview);
+            holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CheckBox cb = (CheckBox) view;
+                    Boolean b = cb.isChecked();
+                    if (b) {
+                        mChecked.set(position, true);
+                        apps.add(packagenames.get(position));
+                        editor.remove("white_list_apps");
+                        editor.commit();
+                        editor.putStringSet("white_list_apps", apps);
+                        editor.commit();
+                        System.out.println("从"+sp.getStringSet("white_list_apps",null));
+                    } else {
+                        mChecked.set(position, false);
+                        apps.remove(packagenames.get(position));
+                        editor.remove("white_list_apps");
+                        editor.commit();
+                        editor.putStringSet("white_list_apps", apps);
+                        editor.commit();
+                        System.out.println("从"+sp.getStringSet("white_list_apps",null));
                     }
-                });
-                convertView.setTag(holder);
-//            } else {
-//                convertView = map.get(position);
-//                holder = (ViewHolder) convertView.getTag();
-//            }
+//                    mChecked.set(position, cb.isChecked());
+                }
+            });
+//            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            if (b) {
+//                                mChecked.remove(position);
+//                                mChecked.set(position, true);
+//                                apps.add(list.get(position).getPackageName());
+//                                System.out.println("switch mChecked:   "+mChecked);
+//                                System.out.println("switch+apps:   "+apps);
+//                                editor.putStringSet("white_list_apps",apps);
+//                                editor.commit();
+//                            } else {
+//                                mChecked.remove(position);
+//                                mChecked.set(position,false);
+//                                apps.remove(list.get(position).getPackageName());
+//                                System.out.println("switch mChecked:   "+mChecked);
+//                                System.out.println("switch+apps:   "+apps);
+//                                editor.putStringSet("white_list_apps",apps);
+//                                editor.commit();
+//                            }
+//                }
+//            });
+            convertView.setTag(holder);
 
 
             holder.checkBox.setChecked(mChecked.get(position));
@@ -171,35 +274,13 @@ public class WhiteListActivity extends Activity {
         private CheckBox checkBox;
     }
 
-    // 当用户点击应用程序图标时，将对这个类做出响应  
-    private class ClickListener implements OnItemClickListener {
 
-        @Override
-        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                long arg3) {
-
-//          // 将应用所选的应用程序信息共享到Application中  
-//          MyApp appState = ((MyApp) getApplicationContext());  
-//          // 获取当前所在选项卡  
-//          String tab_id = appState.getTab_id();  
-//          // 设置所选应用程序信息  
-//          appState.set_AppInfo(tab_id, list.get(arg2).getLabel(), list.get(  
-//                  arg2).getIcon(), list.get(arg2).getPackageName());  
-            Intent intent = new Intent();
-            intent = WhiteListActivity.this.getPackageManager().getLaunchIntentForPackage(list.get(arg2).getPackageName());
-            startActivity(intent);
-            // 销毁当前Activity  
-//          finish();  
-        }
-
-    }
-
-    // 自定义一个 AppsItemInfo 类，用来存储应用程序的相关信息  
+    // 自定义一个 AppsItemInfo 类，用来存储应用程序的相关信息
     private class AppsItemInfo {
 
-        private Drawable icon; // 存放图片  
-        private String label; // 存放应用程序名  
-        private String packageName; // 存放应用程序包名  
+        private Drawable icon; // 存放图片
+        private String label; // 存放应用程序名
+        private String packageName; // 存放应用程序包名
 
         public Drawable getIcon() {
             return icon;
@@ -227,4 +308,4 @@ public class WhiteListActivity extends Activity {
 
     }
 
-}  
+}

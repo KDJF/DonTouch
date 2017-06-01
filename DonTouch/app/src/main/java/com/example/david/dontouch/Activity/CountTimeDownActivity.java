@@ -26,7 +26,7 @@ public class CountTimeDownActivity extends AppCompatActivity {
         setContentView(R.layout.activity_count_time_down);
 
         CircleSeekBar circleSeekBar = (CircleSeekBar) findViewById(R.id.circle_seekbar);
-        circleSeekBar.setProgress(100);
+        circleSeekBar.setProgress(0);
         circleSeekBar.setOnSeekBarChangeListener(new CircleSeekBarOnChangeListener());
 
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

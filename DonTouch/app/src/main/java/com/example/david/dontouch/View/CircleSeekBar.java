@@ -171,7 +171,7 @@ public class CircleSeekBar extends View {
         mIsShowProgressText = false;
         int progressTextStroke = 50;
         int progressTextColor = Color.BLUE;
-        mProgressTextSize = 50;
+        mProgressTextSize = 20;
         
         mProgressTextPaint = new Paint();
         mProgressTextPaint.setColor(progressTextColor);
@@ -226,8 +226,8 @@ public class CircleSeekBar extends View {
     
     private void drawProgressText(Canvas canvas) {
         if (true == mIsShowProgressText){
-            float textWidth = mProgressTextPaint.measureText("" + mCurrentProgress);
-            canvas.drawText("" + mCurrentProgress, mSeekBarCenterX - textWidth / 2, mSeekBarCenterY
+            float textWidth = mProgressTextPaint.measureText(mCurrentProgress+":00");
+            canvas.drawText(mCurrentProgress+":00", mSeekBarCenterX - textWidth / 2, mSeekBarCenterY
                     + mProgressTextSize / 2, mProgressTextPaint);
         }
     }

@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.david.dontouch.Adapter.ViewPagerAdapter;
+import com.example.david.dontouch.Dao.TimerDB;
 import com.example.david.dontouch.Fragment.AssessFragment;
 import com.example.david.dontouch.Fragment.HomeFragment;
 import com.example.david.dontouch.Fragment.JournalFragment;
@@ -96,11 +97,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doSomethingOnScreenOn() {
-        Log.i(TAG, "Screen is on");
+        int result = TimerDB.getInstance(getApplication()).saveTime();
+        Log.i(TAG, "Screen is on: "+ result);
     }
 
     private void doSomethingOnScreenOff() {
-        Log.i(TAG, "Screen is off");
+        TimerDB.getInstance(getApplication()).loadTime();
+        Log.i(TAG, "Screen is off: ");
     }
 
     @Override

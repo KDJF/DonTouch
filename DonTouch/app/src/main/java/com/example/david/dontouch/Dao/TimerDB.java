@@ -59,9 +59,6 @@ public class TimerDB {
         //毫秒可根据系统需要清除或不清除
         cal.set(Calendar.MILLISECOND, 0);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dateFormat.format(cal.getTime()).toString();
-        long startTime = cal.getTimeInMillis();
-        long endTime = startTime + 24 * 3600 * 1000;
         List<String> list = new ArrayList<>();
         String sql = "SELECT * FROM Timer WHERE " + "timer>=?";
         Cursor cursor = db.rawQuery(sql, new String[]{dateFormat.format(cal.getTime()).toString()});

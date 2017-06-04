@@ -1,6 +1,8 @@
 package com.example.david.dontouch.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     BottomNavigationView navigation;
     private String TAG = "ScreenObserverActivity";
     private ScreenObserver mScreenObserver;
+    private int times = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,12 @@ public class MainActivity extends AppCompatActivity
 
     private void doSomethingOnScreenOn() {
         int result = TimerDB.getInstance(getApplication()).saveTime();
+        SharedPreferences mySharedPreferences= getSharedPreferences("locktimes",
+                Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        times = times + 1;
+        editor.putInt("times", times);
+        editor.commit();
         Log.i(TAG, "Screen is on: "+ result);
     }
 

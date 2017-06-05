@@ -1,6 +1,8 @@
 package com.example.david.dontouch.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,12 +22,14 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.david.dontouch.Adapter.ViewPagerAdapter;
+import com.example.david.dontouch.Dao.TimerDB;
 import com.example.david.dontouch.Fragment.AssessFragment;
 import com.example.david.dontouch.Fragment.HomeFragment;
 import com.example.david.dontouch.Fragment.JournalFragment;
 import com.example.david.dontouch.Fragment.NotifFragment;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.Util.BottomNavigationViewHelper;
+import com.example.david.dontouch.Util.ScreenObserver;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity
     NotifFragment notifFragment;
     MenuItem prevMenuItem;
     BottomNavigationView navigation;
+    private String TAG = "ScreenObserverActivity";
+    private ScreenObserver mScreenObserver;
+    private int times = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,41 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setupViewPager(viewPager);
+        mScreenObserver = new ScreenObserver(this);
+        mScreenObserver.requestScreenStateUpdate(new ScreenObserver.ScreenStateListener() {
+            @Override
+            public void onScreenOn() {
+                doSomethingOnScreenOn();
+            }
+
+            @Override
+            public void onScreenOff() {
+                doSomethingOnScreenOff();
+            }
+        });
+    }
+
+    private void doSomethingOnScreenOn() {
+        int result = TimerDB.getInstance(getApplication()).saveTime();
+        SharedPreferences mySharedPreferences= getSharedPreferences("locktimes",
+                Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        times = times + 1;
+        editor.putInt("times", times);
+        editor.commit();
+        Log.i(TAG, "Screen is on: "+ result);
+    }
+
+    private void doSomethingOnScreenOff() {
+        TimerDB.getInstance(getApplication()).loadTime();
+        Log.i(TAG, "Screen is off: ");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //停止监听screen状态
+        mScreenObserver.stopScreenStateUpdate();
     }
 
 

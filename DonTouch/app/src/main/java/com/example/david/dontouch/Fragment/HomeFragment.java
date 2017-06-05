@@ -1,5 +1,7 @@
 package com.example.david.dontouch.Fragment;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +38,7 @@ public class HomeFragment extends Fragment {
 
     private List<View> lists;
     private Random random;//用于产生随机数字
+    private TextView timesView;
 
     private ViewPagerAdapterHome viewPagerAdapterHome;
 
@@ -56,6 +60,7 @@ public class HomeFragment extends Fragment {
         lists.add(weekview);
         lists.add(monthview);
         viewPagerAdapterHome = new ViewPagerAdapterHome(lists);
+
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.home_viewpager);
         viewPager.setAdapter(viewPagerAdapterHome);
 
@@ -76,13 +81,19 @@ public class HomeFragment extends Fragment {
         currentTime.setText(formatter.format(curDate));
         //初始化barchart
         initBarChart(view, yVals);
-
         return view;
     }
 
     private void initTextView(View view, int time_hour, int time_minute, int page) {
         TextView textView_time = (TextView) view.findViewById(R.id.text_time);
         TextView textView_tip = (TextView) view.findViewById(R.id.text_tip);
+
+        SharedPreferences sharedPreferences= view.getContext().getSharedPreferences("locktimes",
+                Activity.MODE_PRIVATE);
+        int times = sharedPreferences.getInt("times", 0);
+        Log.i("TEST_TIMES", "times is : " + times);
+        timesView = (TextView) view.findViewById(R.id.text_times);
+        timesView.setText(Integer.toString(times));
 
         SpannableStringBuilder word = new SpannableStringBuilder();
         final String one = String.valueOf(time_hour);

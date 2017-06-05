@@ -81,7 +81,6 @@ public class HomeFragment extends Fragment {
         currentTime.setText(formatter.format(curDate));
         //初始化barchart
         initBarChart(view, yVals);
-        view.postInvalidate();
         return view;
     }
 

@@ -219,21 +219,16 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, WhiteListActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-            Log.i("nav_gallery","nav_gallery");
-
-        } else if (id == R.id.nav_slideshow) {
-
-            Log.i("nav_slideshow","nav_slideshow");
-        } else if (id == R.id.nav_manage) {
-
-            Log.i("nav_manage","nav_manage");
-        } else if (id == R.id.nav_share) {
-
-            Log.i("nav_share","nav_share");
         } else if (id == R.id.nav_send) {
 
-            Log.i("nav_send","nav_send");
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, ContactUsActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_help) {
+
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, ContactUsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -30,6 +30,7 @@ import com.example.david.dontouch.Fragment.NotifFragment;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.Util.BottomNavigationViewHelper;
 import com.example.david.dontouch.Util.ScreenObserver;
+import com.example.david.dontouch.Util.TimeUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private String TAG = "ScreenObserverActivity";
     private ScreenObserver mScreenObserver;
     private int times = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,19 +102,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doSomethingOnScreenOn() {
-        int result = TimerDB.getInstance(getApplication()).saveTime();
+        int result = TimerDB.getInstance(getApplication()).saveTime(1);
+        TimeUtil.getInstance().openTimeList = TimerDB.getInstance(getApplication()).loadTime("1");
+        Log.i(TAG, "Screen is on: " + TimeUtil.getUseTime());
+        for (int i = 0; i < TimeUtil.getInstance().openTimeList.size(); i++) {
+            Log.i(TAG, "Screen is on: " + TimeUtil.getInstance().openTimeList.get(i));
+        }
+    }
+
+    private void doSomethingOnScreenOff() {
+        int result = TimerDB.getInstance(getApplication()).saveTime(0);
+        TimeUtil.getInstance().closeTimeList = TimerDB.getInstance(getApplication()).loadTime("0");
         SharedPreferences mySharedPreferences= getSharedPreferences("locktimes",
                 Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = mySharedPreferences.edit();
         times = times + 1;
         editor.putInt("times", times);
         editor.commit();
-        Log.i(TAG, "Screen is on: "+ result);
-    }
+        for (int i = 0; i < TimeUtil.getInstance().closeTimeList.size(); i++) {
+            Log.i(TAG, "Screen is off: " + TimeUtil.getInstance().closeTimeList.get(i));
+        }
 
-    private void doSomethingOnScreenOff() {
-        TimerDB.getInstance(getApplication()).loadTime();
-        Log.i(TAG, "Screen is off: ");
     }
 
     @Override

@@ -19,7 +19,7 @@ import java.util.List;
 
 public class TimerDB {
     public static final String DB_NAME = "sqlite_db";
-    public static final int VERSION = 2;
+    public static final int VERSION = 3;
     private static TimerDB timerDB;
     private SQLiteDatabase db;
     private static String TAG = "TimerDB";
@@ -36,9 +36,9 @@ public class TimerDB {
         return timerDB;
     }
 
-    public int saveTime() {
+    public int saveTime(int isOpen) {
         try {
-            String sql = "INSERT INTO Timer(timer) VALUES(CURRENT_TIMESTAMP)";
+            String sql = "INSERT INTO Time(timer, isOpen) VALUES(CURRENT_TIMESTAMP, " + isOpen + ")";
             db.execSQL(sql);
         } catch (Exception e) {
             Log.d("错误", e.getMessage().toString());
@@ -47,7 +47,7 @@ public class TimerDB {
         return 1;
     }
 
-    public List<String> loadTime() {
+    public List<String> loadTime(String isOpen) {
         Date now = new Date(System.currentTimeMillis());
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(now);
@@ -60,16 +60,12 @@ public class TimerDB {
         cal.set(Calendar.MILLISECOND, 0);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<String> list = new ArrayList<>();
-        String sql = "SELECT * FROM Timer WHERE " + "timer>=?";
-        Cursor cursor = db.rawQuery(sql, new String[]{dateFormat.format(cal.getTime()).toString()});
+        String sql = "SELECT * FROM Time WHERE " + "timer>=? and isOpen=?";
+        Cursor cursor = db.rawQuery(sql, new String[]{dateFormat.format(cal.getTime()).toString(), isOpen});
         if (cursor.moveToFirst()) {
             do {
                 list.add(cursor.getString(cursor.getColumnIndex("timer")));
             } while (cursor.moveToNext());
-        }
-
-        for (int i = 0; i < list.size(); i++) {
-            Log.i(TAG, list.get(i));
         }
         return list;
     }

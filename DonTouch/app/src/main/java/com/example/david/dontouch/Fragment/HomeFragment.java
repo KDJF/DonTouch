@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.david.dontouch.Adapter.ViewPagerAdapterHome;
 import com.example.david.dontouch.R;
+import com.example.david.dontouch.Util.TimeUtil;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -65,9 +66,12 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(viewPagerAdapterHome);
 
         //初始化日/周/月的view
-        initTextView(dayview, 6, 35, 1);
-        initTextView(weekview, 50, 28, 2);
-        initTextView(monthview, 236, 55, 3);
+        int time_hour = (int)TimeUtil.getUseTime() / 60;
+        int time_min = (int)TimeUtil.getUseTime() % 60;
+        int time_interval = (int) TimeUtil.getIntervalTime() / 60;
+        initTextView(dayview, time_hour, time_min, time_interval, 1);
+        initTextView(weekview, 50, 28, time_interval, 2);
+        initTextView(monthview, 236, 55, time_interval, 3);
         random = new Random();
         ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
         for (int i = 1; i < 25; i++) {//添加数据源
@@ -84,9 +88,11 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void initTextView(View view, int time_hour, int time_minute, int page) {
+    private void initTextView(View view, int time_hour, int time_minute, int interval, int page) {
         TextView textView_time = (TextView) view.findViewById(R.id.text_time);
         TextView textView_tip = (TextView) view.findViewById(R.id.text_tip);
+        TextView textView_interval = (TextView) view.findViewById(R.id.text_interval);
+        TextView textView_longest = (TextView) view.findViewById(R.id.text_longest);
 
         SharedPreferences sharedPreferences= view.getContext().getSharedPreferences("locktimes",
                 Activity.MODE_PRIVATE);
@@ -119,12 +125,18 @@ public class HomeFragment extends Fragment {
         textView_time.setText(word);
         if (page == 1) {
             textView_tip.setText("今日使用时间");
+            textView_interval.setText(interval + "h");
+            textView_longest.setText(time_hour + "h");
         }
         if (page == 2) {
             textView_tip.setText("本周使用时间");
+            textView_interval.setText(interval + "h");
+            textView_longest.setText(time_hour + "h");
         }
         if (page == 3) {
             textView_tip.setText("本月使用时间");
+            textView_interval.setText(interval + "h");
+            textView_longest.setText(time_hour + "h");
         }
     }
 

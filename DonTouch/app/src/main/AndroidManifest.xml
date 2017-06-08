@@ -47,6 +47,7 @@
         <activity android:name=".Activity.CountTimeDownActivity"></activity>
         <activity android:name=".Activity.WhiteListActivity"></activity>
         <activity android:name=".Activity.ContactUsActivity"></activity>
+        <service android:name=".service.PowerScreenService"></service>
     </application>
 
 </manifest>

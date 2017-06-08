@@ -1,7 +1,5 @@
 package com.example.david.dontouch.Fragment;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,13 +7,13 @@ import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.david.dontouch.Adapter.ViewPagerAdapterHome;
+import com.example.david.dontouch.Dao.TimerDB;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.Util.TimeUtil;
 import com.github.mikephil.charting.charts.BarChart;
@@ -39,10 +37,12 @@ public class HomeFragment extends Fragment {
 
     private List<View> lists;
     private Random random;//用于产生随机数字
-    private TextView timesView;
 
     private ViewPagerAdapterHome viewPagerAdapterHome;
 
+    View dayview;
+    View weekview;
+    View monthview;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -54,9 +54,9 @@ public class HomeFragment extends Fragment {
         //初始化viewpage
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         lists = new ArrayList<View>();
-        View dayview = inflater.inflate(R.layout.homepage_day, null);
-        View weekview = inflater.inflate(R.layout.homepage_day, null);
-        View monthview = inflater.inflate(R.layout.homepage_day, null);
+        dayview = inflater.inflate(R.layout.homepage_day, null);
+         weekview = inflater.inflate(R.layout.homepage_day, null);
+         monthview = inflater.inflate(R.layout.homepage_day, null);
         lists.add(dayview);
         lists.add(weekview);
         lists.add(monthview);
@@ -85,6 +85,31 @@ public class HomeFragment extends Fragment {
         currentTime.setText(formatter.format(curDate));
         //初始化barchart
         initBarChart(view, yVals);
+
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position==0){
+                    initTextView(dayview, 20, 30, 100, 1);
+                }else if(position==1){
+                    initTextView(weekview, 20, 30, 100, 2);
+                }else if(position==2){
+                    initTextView(monthview, 20, 30, 100, 3);
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         return view;
     }
 
@@ -94,12 +119,12 @@ public class HomeFragment extends Fragment {
         TextView textView_interval = (TextView) view.findViewById(R.id.text_interval);
         TextView textView_longest = (TextView) view.findViewById(R.id.text_longest);
 
-        SharedPreferences sharedPreferences= view.getContext().getSharedPreferences("locktimes",
-                Activity.MODE_PRIVATE);
-        int times = sharedPreferences.getInt("times", 0);
-        Log.i("TEST_TIMES", "times is : " + times);
-        timesView = (TextView) view.findViewById(R.id.text_times);
-        timesView.setText(Integer.toString(times));
+//        SharedPreferences sharedPreferences= view.getContext().getSharedPreferences("locktimes",
+//                Activity.MODE_PRIVATE);
+//        int times = sharedPreferences.getInt("times", 0);
+//        Log.i("TEST_TIMES", "times is : " + times);
+         TextView timesView = (TextView) view.findViewById(R.id.text_times);
+//        timesView.setText(Integer.toString(TimerDB.getInstance()));
 
         SpannableStringBuilder word = new SpannableStringBuilder();
         final String one = String.valueOf(time_hour);
@@ -125,16 +150,19 @@ public class HomeFragment extends Fragment {
         textView_time.setText(word);
         if (page == 1) {
             textView_tip.setText("今日使用时间");
+            timesView.setText( TimerDB.getInstance(getContext()).unlocktimes(1)+"");
             textView_interval.setText(interval + "h");
             textView_longest.setText(time_hour + "h");
         }
         if (page == 2) {
             textView_tip.setText("本周使用时间");
+            timesView.setText( TimerDB.getInstance(getContext()).unlocktimes(2)+"");
             textView_interval.setText(interval + "h");
             textView_longest.setText(time_hour + "h");
         }
         if (page == 3) {
             textView_tip.setText("本月使用时间");
+            timesView.setText( TimerDB.getInstance(getContext()).unlocktimes(3)+"");
             textView_interval.setText(interval + "h");
             textView_longest.setText(time_hour + "h");
         }
@@ -173,7 +201,7 @@ public class HomeFragment extends Fragment {
 
         barchart.setDescription("");//设置描述
         barchart.setDescriptionTextSize(20.f);//设置描述字体
-//        barchart.animateXY(1000, 2000);//设置动画
+//      barchart.animateXY(1000, 2000);//设置动画
 
     }
 

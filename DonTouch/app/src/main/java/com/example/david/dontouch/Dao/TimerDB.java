@@ -69,4 +69,49 @@ public class TimerDB {
         }
         return list;
     }
+
+    //type 1 日
+    //type 2 周
+    //type 3 月
+    public int unlocktimes(int type){
+
+        Date now = new Date(System.currentTimeMillis());
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(type==1) {
+            //可以根据需要设置时区
+            //cal.setTimeZone(TimeZone.getDefault());
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            //毫秒可根据系统需要清除或不清除
+            cal.set(Calendar.MILLISECOND, 0);
+            Log.i("day",dateFormat.format(cal.getTime()).toString());
+        }else if(type==2){
+            cal.add(Calendar.DAY_OF_MONTH, -6);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            Log.i("day",dateFormat.format(cal.getTime()).toString());
+        }else if(type==3){
+            cal.add(Calendar.MONTH, -1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            Log.i("day",dateFormat.format(cal.getTime()).toString());
+        }
+        String sql = "SELECT count(*) FROM Time WHERE " + "timer>=? and isOpen=1";
+        Cursor cursor = db.rawQuery(sql, new String[]{dateFormat.format(cal.getTime()).toString()});
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        return 0;
+    }
+    //type 1 2 3
+    public int getduration(int type){
+
+
+        return 0;
+    }
 }

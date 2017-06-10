@@ -37,8 +37,7 @@ public class PowerScreenService extends Service {
 //                    for (int i = 0; i < TimeUtil.getInstance().closeTimeList.size(); i++) {
 //                        Log.i("close", "Screen is off: " + TimeUtil.getInstance().closeTimeList.get(i));
 //                    }
-                    Log.i("unlocktimes",""+TimerDB.getInstance(getApplication()).unlocktimes(1));
-                    Log.i("ontimes",""+TimerDB.getInstance(getApplication()).loadTime("0").size()+"");
+
                 } else if (intentActionString.equals(Intent.ACTION_USER_PRESENT)) {
                     Log.i(TAG, "-------------- unlock !");
                     int result = TimerDB.getInstance(getApplication()).saveTime(1);
@@ -47,9 +46,6 @@ public class PowerScreenService extends Service {
 //                    for (int i = 0; i < TimeUtil.getInstance().openTimeList.size(); i++) {
 //                        Log.i("unlock", "Screen is on: " + TimeUtil.getInstance().openTimeList.get(i));
 //                    }
-                    Log.i("unlocktimes",""+TimerDB.getInstance(getApplication()).unlocktimes(1));
-                    Log.i("ontimes",""+TimerDB.getInstance(getApplication()).loadTime("0").size());
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();

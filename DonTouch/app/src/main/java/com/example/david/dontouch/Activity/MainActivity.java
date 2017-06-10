@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity
             } else {
                 navigation.getMenu().getItem(0).setChecked(false);
             }
-            Log.d("page", "onPageSelected: " + position);
+//            Log.d("page", "onPageSelected: " + position);
             navigation.getMenu().getItem(position).setChecked(true);
             prevMenuItem = navigation.getMenu().getItem(position);
 

@@ -9,7 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.david.dontouch.Dao.TimerDB;
 import com.example.david.dontouch.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -35,6 +37,8 @@ public class JournalFragment extends Fragment {
     private View view1, view2, view3;
     private List<View> viewList;
     private PagerAdapter pageradapter;
+    private TextView avgTimes;
+    private TextView avgLong;
 //    private TextView btn_tv1, btn_tv2, btn_tv3, btn_tv4;
 
 
@@ -48,15 +52,43 @@ public class JournalFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_journal, container, false);
         init(view);
-        Random random = new Random();
+
+//
+//        每周次数填入barchart
         ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
+        int[] timesArray=new  int[7];
+        for (int i = 0; i < 7; i++) {
+            timesArray[i] = 0;
+        }
+        timesArray = TimerDB.getInstance(getContext()).gettimes(2);
         for (int i = 0; i < 7; i++) {//添加数据源
-            yVals.add(new BarEntry(random.nextInt(60), i));
+            yVals.add(new BarEntry(timesArray[i], i));
 
         }
-
-        initBarChart_duration(view, getWeek_xValues(), yVals);
         initBarChart_times(view, getWeek_xValues(), yVals);
+
+        //初始化平均次数
+        int total=0;
+        double avg=0;
+        for (int i = 0; i < 7; i++) {
+            total=timesArray[i]+total;
+        }
+        avg=total/7;
+        avgTimes= (TextView) view.findViewById(R.id.total_times);
+        avgTimes.setText("平均次数:"+avg+"次");
+
+
+        Random random = new Random();
+        ArrayList<BarEntry> yVals_2 = new ArrayList<>();//Y轴方向第一组数组
+        for (int i = 0; i < 7; i++) {//添加数据源
+            yVals_2.add(new BarEntry(random.nextInt(15), i));
+
+        }
+        initBarChart_duration(view, getWeek_xValues(), yVals_2);
+        //初始化平均时间
+        avgTimes= (TextView) view.findViewById(R.id.total_duration);
+        avgTimes.setText("平均时长:"+6.3+"h");
+
         return view;
     }
 

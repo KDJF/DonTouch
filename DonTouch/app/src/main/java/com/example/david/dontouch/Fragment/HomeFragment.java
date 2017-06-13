@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
     View dayview;
     View weekview;
     View monthview;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -55,8 +56,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         lists = new ArrayList<View>();
         dayview = inflater.inflate(R.layout.homepage_day, null);
-         weekview = inflater.inflate(R.layout.homepage_day, null);
-         monthview = inflater.inflate(R.layout.homepage_day, null);
+        weekview = inflater.inflate(R.layout.homepage_day, null);
+        monthview = inflater.inflate(R.layout.homepage_day, null);
         lists.add(dayview);
         lists.add(weekview);
         lists.add(monthview);
@@ -65,27 +66,35 @@ public class HomeFragment extends Fragment {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.home_viewpager);
         viewPager.setAdapter(viewPagerAdapterHome);
 
-        int time_hour = (int) (TimerDB.getInstance(getContext()).totaltime(1)/1000/3600);
-        Log.i("HomeFragment",time_hour+"");
-        int time_min = (int) ((TimerDB.getInstance(getContext()).totaltime(1)/1000-time_hour*3600)/60);
-        int time_interval = (int) (TimerDB.getInstance(getContext()).getinterval()/1000/60);
-        int longest= (int) (TimerDB.getInstance(getContext()).getlongest(1)/1000/60);
-        initTextView(dayview, time_hour, time_min, time_interval,longest, 1);
-        initTextView(weekview, time_hour, time_min, time_interval,longest, 2);
-        initTextView(monthview, time_hour, time_min, time_interval,longest, 3);
-        random = new Random();
-        ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
-        for (int i = 1; i < 25; i++) {//添加数据源
-            yVals.add(new BarEntry(random.nextInt(60), i));
+        int time_hour = (int) (TimerDB.getInstance(getContext()).totaltime(1) / 1000 / 3600);
+        Log.i("HomeFragment", time_hour + "");
+        int time_min = (int) ((TimerDB.getInstance(getContext()).totaltime(1) / 1000 - time_hour * 3600) / 60);
+        int time_interval = (int) (TimerDB.getInstance(getContext()).getinterval() / 1000 / 60);
+        int longest = (int) (TimerDB.getInstance(getContext()).getlongest(1) / 1000 / 60);
+        initTextView(dayview, time_hour, time_min, time_interval, longest, 1);
+        initTextView(weekview, time_hour, time_min, time_interval, longest, 2);
+        initTextView(monthview, time_hour, time_min, time_interval, longest, 3);
 
-        }
-
-        TextView currentTime= (TextView) view.findViewById(R.id.current_time);
-        SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy年MM月dd日");
-        Date curDate =  new Date(System.currentTimeMillis());
+        TextView currentTime = (TextView) view.findViewById(R.id.current_time);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
+        Date curDate = new Date(System.currentTimeMillis());
         //今日时间
         currentTime.setText(formatter.format(curDate));
+
+
         //初始化barchart
+//        random = new Random();
+        ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
+        int[] timesArray=new  int[24];
+        for (int i = 0; i < 24; i++) {
+            timesArray[i] = 0;
+        }
+        timesArray = TimerDB.getInstance(getContext()).gettimes(1);
+        for (int i = 0; i < 24; i++) {//添加数据源
+
+            yVals.add(new BarEntry(timesArray[i], i));
+
+        }
         initBarChart(view, yVals);
 
 
@@ -97,24 +106,24 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                if(position==0){
-                    int time_hour = (int) (TimerDB.getInstance(getContext()).totaltime(1)/1000/3600);
-                    int time_min = (int) ((TimerDB.getInstance(getContext()).totaltime(1)/1000-time_hour*3600)/60);
-                    int time_interval = (int) (TimerDB.getInstance(getContext()).getinterval()/1000/60);
-                    int longest= (int) (TimerDB.getInstance(getContext()).getlongest(1)/1000/60);
-                    initTextView(dayview, time_hour, time_min, time_interval,longest,1);
-                }else if(position==1){
-                    int time_hour = (int) (TimerDB.getInstance(getContext()).totaltime(2)/1000/3600);
-                    int time_min = (int) ((TimerDB.getInstance(getContext()).totaltime(2)/1000-time_hour*3600)/60);
-                    int time_interval = (int) (TimerDB.getInstance(getContext()).getinterval()/1000/60);
-                    int longest= (int) (TimerDB.getInstance(getContext()).getlongest(1)/1000/60);
-                    initTextView(weekview, time_hour, time_min, time_interval,longest,2);
-                }else if(position==2){
-                    int time_hour = (int) (TimerDB.getInstance(getContext()).totaltime(3)/1000/3600);
-                    int time_min = (int) ((TimerDB.getInstance(getContext()).totaltime(3)/1000-time_hour*3600)/60);
-                    int time_interval =(int) (TimerDB.getInstance(getContext()).getinterval()/1000/60);
-                    int longest= (int) (TimerDB.getInstance(getContext()).getlongest(1)/1000/60);
-                    initTextView(monthview, time_hour, time_min, time_interval,longest,3);
+                if (position == 0) {
+                    int time_hour = (int) (TimerDB.getInstance(getContext()).totaltime(1) / 1000 / 3600);
+                    int time_min = (int) ((TimerDB.getInstance(getContext()).totaltime(1) / 1000 - time_hour * 3600) / 60);
+                    int time_interval = (int) (TimerDB.getInstance(getContext()).getinterval() / 1000 / 60);
+                    int longest = (int) (TimerDB.getInstance(getContext()).getlongest(1) / 1000 / 60);
+                    initTextView(dayview, time_hour, time_min, time_interval, longest, 1);
+                } else if (position == 1) {
+                    int time_hour = (int) (TimerDB.getInstance(getContext()).totaltime(2) / 1000 / 3600);
+                    int time_min = (int) ((TimerDB.getInstance(getContext()).totaltime(2) / 1000 - time_hour * 3600) / 60);
+                    int time_interval = (int) (TimerDB.getInstance(getContext()).getinterval() / 1000 / 60);
+                    int longest = (int) (TimerDB.getInstance(getContext()).getlongest(1) / 1000 / 60);
+                    initTextView(weekview, time_hour, time_min, time_interval, longest, 2);
+                } else if (position == 2) {
+                    int time_hour = (int) (TimerDB.getInstance(getContext()).totaltime(3) / 1000 / 3600);
+                    int time_min = (int) ((TimerDB.getInstance(getContext()).totaltime(3) / 1000 - time_hour * 3600) / 60);
+                    int time_interval = (int) (TimerDB.getInstance(getContext()).getinterval() / 1000 / 60);
+                    int longest = (int) (TimerDB.getInstance(getContext()).getlongest(1) / 1000 / 60);
+                    initTextView(monthview, time_hour, time_min, time_interval, longest, 3);
                 }
 
             }
@@ -127,7 +136,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void initTextView(View view, int time_hour, int time_minute, int interval, int longest,int page) {
+    private void initTextView(View view, int time_hour, int time_minute, int interval, int longest, int page) {
         TextView textView_time = (TextView) view.findViewById(R.id.text_time);
         TextView textView_tip = (TextView) view.findViewById(R.id.text_tip);
         TextView textView_interval = (TextView) view.findViewById(R.id.text_interval);
@@ -158,19 +167,19 @@ public class HomeFragment extends Fragment {
         textView_time.setText(word);
         if (page == 1) {
             textView_tip.setText("今日使用时间");
-            timesView.setText( TimerDB.getInstance(getContext()).unlocktimes(1)+"");
+            timesView.setText(TimerDB.getInstance(getContext()).unlocktimes(1) + "");
             textView_interval.setText(interval + "min");
             textView_longest.setText(longest + "min");
         }
         if (page == 2) {
             textView_tip.setText("本周使用时间");
-            timesView.setText( TimerDB.getInstance(getContext()).unlocktimes(2)+"");
+            timesView.setText(TimerDB.getInstance(getContext()).unlocktimes(2) + "");
             textView_interval.setText(interval + "min");
             textView_longest.setText(longest + "min");
         }
         if (page == 3) {
             textView_tip.setText("本月使用时间");
-            timesView.setText( TimerDB.getInstance(getContext()).unlocktimes(3)+"");
+            timesView.setText(TimerDB.getInstance(getContext()).unlocktimes(3) + "");
             textView_interval.setText(interval + "min");
             textView_longest.setText(longest + "min");
         }
@@ -181,8 +190,8 @@ public class HomeFragment extends Fragment {
 //        ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
         ArrayList<String> xVals = new ArrayList<>();//X轴数据
 
-        for (int i = 1; i < 25; i++) {//添加数据源
-            if (i < 10)
+        for (int i = 0; i < 24; i++) {//添加数据源
+            if (i < 10 && i > 0)
                 xVals.add("0" + i + "h");
             else
                 xVals.add(i + "h");
@@ -190,7 +199,7 @@ public class HomeFragment extends Fragment {
 
         BarDataSet barDataSet = new BarDataSet(yVals, "发现");
 
-        barDataSet.setColor(Color.rgb(20,185,214));//设置第一组数据颜色
+        barDataSet.setColor(Color.rgb(20, 185, 214));//设置第一组数据颜色
 
         ArrayList<IBarDataSet> onebardata = new ArrayList<>();//IBarDataSet 接口很关键，是添加多组数据的关键结构，LineChart也是可以采用对应的接口类，也可以添加多组数据
         onebardata.add(barDataSet);

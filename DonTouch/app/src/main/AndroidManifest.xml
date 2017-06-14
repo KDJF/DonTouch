@@ -15,7 +15,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/dontouch"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -46,6 +46,8 @@
             android:theme="@style/FullscreenTheme" />
         <activity android:name=".Activity.CountTimeDownActivity"></activity>
         <activity android:name=".Activity.WhiteListActivity"></activity>
+        <activity android:name=".Activity.ContactUsActivity"></activity>
+        <service android:name=".service.PowerScreenService"></service>
     </application>
 
 </manifest>

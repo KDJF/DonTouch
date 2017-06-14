@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/contactus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:textSize="50dp"
+        android:text="联系我们"
+        />
+    <ImageView
+        android:id="@+id/contactus_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/contactus"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:src="@drawable/dontouch"/>
+
+    <TextView
+        android:id="@+id/textSid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/contactus_image"
+        android:autoLink="email"
+        android:text="14301030@bjtu.edu.cn\n14301034@bjtu.edu.cn\n14301044@bjtu.edu.cn\n14301045@bjtu.edu.cn\n14301046@bjtu.edu.cn\n14301049@bjtu.edu.cn"
+        />
+    <Button
+        android:id="@+id/deleteTime"
+        android:layout_below="@+id/textSid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="deleteTime"/>
+    <Button
+        android:id="@+id/temp"
+        android:layout_below="@+id/textSid"
+        android:layout_toRightOf="@+id/deleteTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="temp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="git@github.com:KDJF/DonTouch.git"
+        android:paddingBottom="20dp"
+        />
+
+</RelativeLayout>

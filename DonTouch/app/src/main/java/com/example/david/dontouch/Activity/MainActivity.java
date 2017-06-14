@@ -1,8 +1,6 @@
 package com.example.david.dontouch.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,14 +19,13 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.david.dontouch.Adapter.ViewPagerAdapter;
-import com.example.david.dontouch.Dao.TimerDB;
 import com.example.david.dontouch.Fragment.AssessFragment;
 import com.example.david.dontouch.Fragment.HomeFragment;
 import com.example.david.dontouch.Fragment.JournalFragment;
 import com.example.david.dontouch.Fragment.NotifFragment;
 import com.example.david.dontouch.R;
 import com.example.david.dontouch.Util.BottomNavigationViewHelper;
-import com.example.david.dontouch.Util.ScreenObserver;
+import com.example.david.dontouch.service.PowerScreenService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -41,9 +37,10 @@ public class MainActivity extends AppCompatActivity
     NotifFragment notifFragment;
     MenuItem prevMenuItem;
     BottomNavigationView navigation;
-    private String TAG = "ScreenObserverActivity";
-    private ScreenObserver mScreenObserver;
-    private int times = 0;
+//    private String TAG = "ScreenObserverActivity";
+//    private ScreenObserver mScreenObserver;
+//    private int times = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,41 +82,54 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setupViewPager(viewPager);
-        mScreenObserver = new ScreenObserver(this);
-        mScreenObserver.requestScreenStateUpdate(new ScreenObserver.ScreenStateListener() {
-            @Override
-            public void onScreenOn() {
-                doSomethingOnScreenOn();
-            }
+//        mScreenObserver = new ScreenObserver(this);
+//        mScreenObserver.requestScreenStateUpdate(new ScreenObserver.ScreenStateListener() {
+//            @Override
+//            public void onScreenOn() {
+//                doSomethingOnScreenOn();
+//            }
+//
+//            @Override
+//            public void onScreenOff() {
+//                doSomethingOnScreenOff();
+//            }
+//        });
 
-            @Override
-            public void onScreenOff() {
-                doSomethingOnScreenOff();
-            }
-        });
+        //service监控屏幕解锁与锁
+        Intent serviceOne = new Intent();
+        serviceOne.setClass(MainActivity.this, PowerScreenService.class);
+        startService(serviceOne);
     }
 
-    private void doSomethingOnScreenOn() {
-        int result = TimerDB.getInstance(getApplication()).saveTime();
-        SharedPreferences mySharedPreferences= getSharedPreferences("locktimes",
-                Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mySharedPreferences.edit();
-        times = times + 1;
-        editor.putInt("times", times);
-        editor.commit();
-        Log.i(TAG, "Screen is on: "+ result);
-    }
+//    private void doSomethingOnScreenOn() {
+//        int result = TimerDB.getInstance(getApplication()).saveTime(1);
+//        TimeUtil.getInstance().openTimeList = TimerDB.getInstance(getApplication()).loadTime("1");
+//        Log.i(TAG, "Screen is on: " + TimeUtil.getUseTime());
+//        for (int i = 0; i < TimeUtil.getInstance().openTimeList.size(); i++) {
+//            Log.i(TAG, "Screen is on: " + TimeUtil.getInstance().openTimeList.get(i));
+//        }
+//    }
 
-    private void doSomethingOnScreenOff() {
-        TimerDB.getInstance(getApplication()).loadTime();
-        Log.i(TAG, "Screen is off: ");
-    }
+//    private void doSomethingOnScreenOff() {
+//        int result = TimerDB.getInstance(getApplication()).saveTime(0);
+//        TimeUtil.getInstance().closeTimeList = TimerDB.getInstance(getApplication()).loadTime("0");
+//        SharedPreferences mySharedPreferences= getSharedPreferences("locktimes",
+//                Activity.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = mySharedPreferences.edit();
+//        times = times + 1;
+//        editor.putInt("times", times);
+//        editor.commit();
+//        for (int i = 0; i < TimeUtil.getInstance().closeTimeList.size(); i++) {
+//            Log.i(TAG, "Screen is off: " + TimeUtil.getInstance().closeTimeList.get(i));
+//        }
+//
+//    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //停止监听screen状态
-        mScreenObserver.stopScreenStateUpdate();
+//        mScreenObserver.stopScreenStateUpdate();
     }
 
 
@@ -137,7 +147,7 @@ public class MainActivity extends AppCompatActivity
             } else {
                 navigation.getMenu().getItem(0).setChecked(false);
             }
-            Log.d("page", "onPageSelected: " + position);
+//            Log.d("page", "onPageSelected: " + position);
             navigation.getMenu().getItem(position).setChecked(true);
             prevMenuItem = navigation.getMenu().getItem(position);
 
@@ -209,21 +219,16 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, WhiteListActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-            Log.i("nav_gallery","nav_gallery");
-
-        } else if (id == R.id.nav_slideshow) {
-
-            Log.i("nav_slideshow","nav_slideshow");
-        } else if (id == R.id.nav_manage) {
-
-            Log.i("nav_manage","nav_manage");
-        } else if (id == R.id.nav_share) {
-
-            Log.i("nav_share","nav_share");
         } else if (id == R.id.nav_send) {
 
-            Log.i("nav_send","nav_send");
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, ContactUsActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_help) {
+
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, ContactUsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

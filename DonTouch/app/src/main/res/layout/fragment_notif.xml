@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.david.dontouch.Fragment.NotifFragment">
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/notif_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,6 +14,7 @@
             android:id="@+id/notif_progress"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:layout_centerHorizontal="true"
             tc:radius="100dip"
             tc:strokeWidth="20dip"
             tc:circleColor="@color/gray"
@@ -23,10 +24,14 @@
         <ListView
             android:id="@+id/notif_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:headerDividersEnabled="false"
             android:dividerHeight="2dp"
-            android:footerDividersEnabled="false">
+            android:footerDividersEnabled="false"
+            android:layout_below="@+id/notif_progress"
+            android:layout_above="@+id/notif_button"
+            android:layout_centerHorizontal="true"
+            >
         </ListView>
 
         <Button
@@ -36,7 +41,8 @@
             android:text="关屏挑战"
             android:gravity="center"
             android:textSize="@dimen/text_size"
-            android:background="@color/colorPrimary"/>
-    </LinearLayout>
+            android:background="@color/colorPrimary"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
 
 </FrameLayout>

@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.david.dontouch.Dao.TimerDB;
 import com.example.david.dontouch.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -30,13 +30,16 @@ import java.util.Random;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JournalFragment extends Fragment implements View.OnClickListener {
+public class JournalFragment extends Fragment {
+//public class JournalFragment extends Fragment implements View.OnClickListener {
 
     private ViewPager vp;
     private View view1, view2, view3;
     private List<View> viewList;
     private PagerAdapter pageradapter;
-    private TextView btn_tv1, btn_tv2, btn_tv3, btn_tv4;
+    private TextView avgTimes;
+    private TextView avgLong;
+//    private TextView btn_tv1, btn_tv2, btn_tv3, btn_tv4;
 
 
     public JournalFragment() {
@@ -49,15 +52,43 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_journal, container, false);
         init(view);
-        Random random = new Random();
+
+//
+//        每周次数填入barchart
         ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
+        int[] timesArray=new  int[7];
+        for (int i = 0; i < 7; i++) {
+            timesArray[i] = 0;
+        }
+        timesArray = TimerDB.getInstance(getContext()).gettimes(2);
         for (int i = 0; i < 7; i++) {//添加数据源
-            yVals.add(new BarEntry(random.nextInt(60), i));
+            yVals.add(new BarEntry(timesArray[i], i));
 
         }
-
-        initBarChart_duration(view, getWeek_xValues(), yVals);
         initBarChart_times(view, getWeek_xValues(), yVals);
+
+        //初始化平均次数
+        int total=0;
+        double avg=0;
+        for (int i = 0; i < 7; i++) {
+            total=timesArray[i]+total;
+        }
+        avg=total/7;
+        avgTimes= (TextView) view.findViewById(R.id.total_times);
+        avgTimes.setText("平均次数:"+avg+"次");
+
+
+        Random random = new Random();
+        ArrayList<BarEntry> yVals_2 = new ArrayList<>();//Y轴方向第一组数组
+        for (int i = 0; i < 7; i++) {//添加数据源
+            yVals_2.add(new BarEntry(random.nextInt(15), i));
+
+        }
+        initBarChart_duration(view, getWeek_xValues(), yVals_2);
+        //初始化平均时间
+        avgTimes= (TextView) view.findViewById(R.id.total_duration);
+        avgTimes.setText("平均时长:"+6.3+"h");
+
         return view;
     }
 
@@ -106,67 +137,67 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
 
         //tv1
-        btn_tv1 = (TextView) view.findViewById(R.id.btn_tv1);
-        btn_tv2 = (TextView) view.findViewById(R.id.btn_tv2);
-        btn_tv3 = (TextView) view.findViewById(R.id.btn_tv3);
-        btn_tv4 = (TextView) view.findViewById(R.id.btn_tv4);
-        btn_tv1.setOnClickListener(this);
-        btn_tv2.setOnClickListener(this);
-        btn_tv3.setOnClickListener(this);
-        btn_tv4.setOnClickListener(this);
+//        btn_tv1 = (TextView) view.findViewById(R.id.btn_tv1);
+//        btn_tv2 = (TextView) view.findViewById(R.id.btn_tv2);
+//        btn_tv3 = (TextView) view.findViewById(R.id.btn_tv3);
+//        btn_tv4 = (TextView) view.findViewById(R.id.btn_tv4);
+//        btn_tv1.setOnClickListener(this);
+//        btn_tv2.setOnClickListener(this);
+//        btn_tv3.setOnClickListener(this);
+//        btn_tv4.setOnClickListener(this);
     }
 
     //清空按钮颜色
-    private void clearSelect() {
-
-        btn_tv1.setTextColor(Color.rgb(100, 149, 237));
-        btn_tv2.setTextColor(Color.rgb(100, 149, 237));
-        btn_tv3.setTextColor(Color.rgb(100, 149, 237));
-        btn_tv4.setTextColor(Color.rgb(100, 149, 237));
-        btn_tv1.setBackgroundResource(R.drawable.leftbtnshapefalse);
-        btn_tv2.setBackgroundColor(Color.WHITE);
-        btn_tv3.setBackgroundColor(Color.WHITE);
-        btn_tv4.setBackgroundResource(R.drawable.rightbtnshapefalse);
-
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        // TODO Auto-generated method stub
-        switch (v.getId()) {
-            case R.id.btn_tv1:
-                clearSelect();
-                btn_tv1.setTextColor(Color.WHITE);
-                btn_tv1.setBackgroundResource(R.drawable.leftbtnshapetrue);
-                break;
-            case R.id.btn_tv2:
-                clearSelect();
-                btn_tv2.setTextColor(Color.WHITE);
-                btn_tv2.setBackgroundColor(Color.rgb(100, 149, 237));
-
-//                Random random = new Random();
-//                ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
-//                for (int i = 1; i < 8; i++) {//添加数据源
-//                    yVals.add(new BarEntry(random.nextInt(60), i));
+//    private void clearSelect() {
 //
-//                }
+//        btn_tv1.setTextColor(Color.rgb(100, 149, 237));
+//        btn_tv2.setTextColor(Color.rgb(100, 149, 237));
+//        btn_tv3.setTextColor(Color.rgb(100, 149, 237));
+//        btn_tv4.setTextColor(Color.rgb(100, 149, 237));
+//        btn_tv1.setBackgroundResource(R.drawable.leftbtnshapefalse);
+//        btn_tv2.setBackgroundColor(Color.WHITE);
+//        btn_tv3.setBackgroundColor(Color.WHITE);
+//        btn_tv4.setBackgroundResource(R.drawable.rightbtnshapefalse);
 //
-//                initBarChart_duration(v, getWeek_xValues(), yVals);
-//                initBarChart_times(v, getWeek_xValues(), yVals);
-                break;
-            case R.id.btn_tv3:
-                clearSelect();
-                btn_tv3.setTextColor(Color.WHITE);
-                btn_tv3.setBackgroundColor(Color.rgb(100, 149, 237));
-                break;
-            case R.id.btn_tv4:
-                clearSelect();
-                btn_tv4.setTextColor(Color.WHITE);
-                btn_tv4.setBackgroundResource(R.drawable.rightbtnshapetrue);
-                break;
-        }
-    }
+//
+//    }
+
+//    @Override
+//    public void onClick(View v) {
+//        // TODO Auto-generated method stub
+//        switch (v.getId()) {
+//            case R.id.btn_tv1:
+//                clearSelect();
+//                btn_tv1.setTextColor(Color.WHITE);
+//                btn_tv1.setBackgroundResource(R.drawable.leftbtnshapetrue);
+//                break;
+//            case R.id.btn_tv2:
+//                clearSelect();
+//                btn_tv2.setTextColor(Color.WHITE);
+//                btn_tv2.setBackgroundColor(Color.rgb(100, 149, 237));
+//
+////                Random random = new Random();
+////                ArrayList<BarEntry> yVals = new ArrayList<>();//Y轴方向第一组数组
+////                for (int i = 1; i < 8; i++) {//添加数据源
+////                    yVals.add(new BarEntry(random.nextInt(60), i));
+////
+////                }
+////
+////                initBarChart_duration(v, getWeek_xValues(), yVals);
+////                initBarChart_times(v, getWeek_xValues(), yVals);
+//                break;
+//            case R.id.btn_tv3:
+//                clearSelect();
+//                btn_tv3.setTextColor(Color.WHITE);
+//                btn_tv3.setBackgroundColor(Color.rgb(100, 149, 237));
+//                break;
+//            case R.id.btn_tv4:
+//                clearSelect();
+//                btn_tv4.setTextColor(Color.WHITE);
+//                btn_tv4.setBackgroundResource(R.drawable.rightbtnshapetrue);
+//                break;
+//        }
+//    }
 
     private void initBarChart_duration(View view, ArrayList<String> xVals, ArrayList<BarEntry> yVals) {
         BarChart barchart = (BarChart) view.findViewById(R.id.barchart_total_duration);
@@ -232,10 +263,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         SimpleDateFormat formatter = new SimpleDateFormat("dd");
         Date curDate = new Date(System.currentTimeMillis());
         String day = formatter.format(curDate);// 获取当前月份的日期号码
-        Log.i("day", day);
         formatter = new SimpleDateFormat("E");
         String week = formatter.format(curDate);// 获取当前月份的日期号码
-        Log.i("week", week);
 
         for (int i = 1; i < 25; i++) {//添加数据源
             if (i < 10)
@@ -272,10 +301,6 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         for (int  i=0;i<current+1;i++){
             xValues.add(weeks.get(i));
         }
-
-
-        Log.i("xValues",xValues.get(0)+xValues.get(1)+
-                xValues.get(2)+xValues.get(3)+xValues.get(4)+xValues.get(5)+xValues.get(6));
         return xValues;
     }
 }

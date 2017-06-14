@@ -16,9 +16,10 @@ public class OpenHelper extends SQLiteOpenHelper {
             + "username text, "
             + "userpwd text)";
 
-    public static final String CREATE_TIME = "CREATE TABLE Timer ("
+    public static final String CREATE_TIME = "CREATE TABLE Time ("
             + "id integer primary key autoincrement, "
-            + "timer DATETIME DEFAULT CURRENT_TIMESTAMP)";
+            + "timer DATETIME DEFAULT CURRENT_TIMESTAMP, "
+            + "isOpen integer)";
 
 
     public OpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -29,6 +30,7 @@ public class OpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS Time");
         db.execSQL(CREATE_TIME);
         db.execSQL(CREATE_USER);
         Log.i(TAG, "CREATE TABLES");
@@ -37,8 +39,7 @@ public class OpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(CREATE_TIME);
-        //db.execSQL(CREATE_USER);
-        //onCreate(db);
+        db.execSQL("DELETE FROM Time");
         Log.i(TAG, "CREATE TABLES");
     }
 }
